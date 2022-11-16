@@ -84,11 +84,23 @@ except Exception as e:
     browser.save_screenshot('tradeerror.png')
     print('ex 85', str(e))
 
+browser.implicitly_wait(30)
+
 try:
+    browser.implicitly_wait(50)
     elementPara = WebDriverWait(browser, 20).until(
-        EC.presence_of_element_located((By.ID, "tnm"))
+        EC.element_to_be_clickable((By.ID, "tnm"))
     )
+    # slow internet
+
+    if not elementPara.is_enabled():
+        elementPara = WebDriverWait(browser, 30).until(
+            EC.presence_of_element_located((By.ID, "tnm"))
+        )
     trnNumberExists = elementPara.get_attribute('value')
+    print(98, trnNumberExists)
+    print(99, elementPara.is_enabled())
+    browser.save_screenshot('trnNumberExists.png')
 except Exception as e:
     trnNumberExists = ''
     browser.save_screenshot('trninerror.png')
@@ -199,14 +211,15 @@ def NewSecondSection():
         dobElement = WebDriverWait(browser, 200).until(
             EC.presence_of_element_located((By.ID, "dob"))
         ).send_keys('12/05/1990')
-        elementdob = WebDriverWait(browser, 20).until(
-            EC.presence_of_element_located((By.ID, "dob"))
-        )
+        # elementdob = WebDriverWait(browser, 20).until(
+        #     EC.presence_of_element_located((By.ID, "dob"))
+        # )
         dobExists = elementdob.get_attribute('value')
         if dobExists=='':
             dobElement = WebDriverWait(browser, 200).until(
                 EC.presence_of_element_located((By.ID, "dob"))
             ).send_keys('12/05/1990')
+            browser.find_element("id", "dob").send_keys('12/05/1990')
     except Exception as e:
         browser.save_screenshot("doberror.png")
         print('ex 189', str(e))
@@ -246,29 +259,6 @@ def NewSecondSection():
         print('ex 223', str(e))
 
     try:
-        searchElement = WebDriverWait(browser, 50).until(
-            EC.presence_of_element_located((By.ID, "onMapSerachId"))
-        ).send_keys('635204')
-        browser.implicitly_wait(5)
-    except Exception as e:
-        browser.save_screenshot("maperror.png")
-        print('ex 231', str(e))
-
-    # try:
-    #     browser.implicitly_wait(20)
-    #
-    #     elementrs = WebDriverWait(browser, 30).until(
-    #         EC.element_to_be_clickable((By.XPATH, '//*[@id="as-results-onMapSerachId"]/ul/li[1]'))
-    #     )
-    #
-    #     browser.implicitly_wait(10)
-    #     print(241, elementrs.get_attribute('type'))
-    #     elementrs.click()
-    # except Exception as e:
-    #     browser.save_screenshot("reserror.png")
-    #     print('ex 245', str(e))
-
-    try:
         fileElement = WebDriverWait(browser, 200).until(
             EC.presence_of_element_located((By.ID, "pd_upload"))
         ).send_keys('C:\\Users\\Murugan\\Desktop\\download.jpg')
@@ -301,6 +291,46 @@ def NewSecondSection():
         browser.save_screenshot("saveerror273.png")
         print('ex 274', str(e))
 
+    try:
+        searchElement = WebDriverWait(browser, 50).until(
+            EC.presence_of_element_located((By.ID, "onMapSerachId"))
+        )
+        browser.find_element("id", "onMapSerachId").send_keys('635204')
+        browser.find_element("id", "onMapSerachId").send_keys('')
+        time.sleep(5)
+    except Exception as e:
+        browser.save_screenshot("maperror.png")
+        print('ex 231', str(e))
+
+    try:
+
+        browser.implicitly_wait(20)
+        listElements = browser.find_elements(By.XPATH, '//*[@id="as-results-onMapSerachId"]/ul/li')
+        browser.save_screenshot("listElements.png")
+        for list in listElements:
+            if '635204' in list.text:
+                list.click()
+                print(298, list.text)
+                break
+
+    except Exception as e:
+        browser.save_screenshot("reserror.png")
+        print('ex 302', str(e))
+
+
+    # try:
+    #     browser.implicitly_wait(20)
+    #
+    #     elementrs = WebDriverWait(browser, 30).until(
+    #         EC.element_to_be_clickable((By.XPATH, '//*[@id="as-results-onMapSerachId"]/ul/li[1]'))
+    #     )
+    #
+    #     browser.implicitly_wait(10)
+    #     print(241, elementrs.get_attribute('type'))
+    #     elementrs.click()
+    # except Exception as e:
+    #     browser.save_screenshot("reserror.png")
+    #     print('ex 245', str(e))
 
 if trnNumberExists is None or trnNumberExists =='':
     print("this is new record", trnNumberExists)
@@ -382,11 +412,11 @@ if FatherExists is None or FatherExists =='':
         elementbs.click()
         print("Second form submitted")
     except Exception as e:
-        elementnewb = WebDriverWait(browser, 30).until(
+        elementnewb = WebDriverWait(browser, 100).until(
             EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'Save & Continue')]"))
         )
 
-        browser.implicitly_wait(20)
+        browser.implicitly_wait(10)
         elementnewb.click()
         browser.save_screenshot("saveerror294.png")
         print('ex 295', str(e))
@@ -414,7 +444,123 @@ else:
         browser.save_screenshot("saveerror294.png")
         print('ex 295', str(e))
 
-browser.execute_script("alert('process completed')")
+# time.sleep(50)
+# browser.execute_script("alert('process completed')")
 
-print('Process completed')
+# print('Process completed')
+
+try:
+    browser.save_screenshot('alert.png')
+    element = WebDriverWait(browser, 100).until(
+            EC.element_to_be_clickable((By.XPATH, '//*[@id="confirmDlg"]/div/div/div[2]/a[1]'))
+        )
+    element.click()
+except Exception as e:
+    browser.save_screenshot('alerterror.png')
+    print("459, failed to locate alert", e)
+
+try:
+    browser.implicitly_wait(20)
+    primElement = WebDriverWait(browser, 30).until(
+                EC.presence_of_element_located((By.ID, "auth_prim"))
+            )
+    print(467, primElement.is_selected())
+    if not primElement.is_selected():
+        element = browser.find_element(By.ID, "auth_prim")
+        browser.execute_script("arguments[0].scrollIntoView(true);", element)
+
+        browser.execute_script("arguments[0].click();", element)
+
+except Exception as e:
+    # element = WebDriverWait(browser, 30).until(
+    #     EC.element_to_be_clickable((By.ID, "auth_prim"))
+    # )
+    #
+    # print(475, element.get_attribute('type'))
+    # element.click()
+    browser.save_screenshot("primerror273.png")
+    print('ex 480', str(e))
+
+try:
+    print("second form final submission enters")
+    browser.implicitly_wait(20)
+
+    elementbs = WebDriverWait(browser, 30).until(
+        EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'Save & Continue')]"))
+    )
+
+    print(490, elementbs)
+    browser.implicitly_wait(30)
+    print(492, elementbs.get_attribute('type'))
+    elementbs.click()
+except Exception as e:
+    # elementnewb = WebDriverWait(browser, 30).until(
+    #     EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'Save & Continue')]"))
+    # )
+    #
+    # browser.implicitly_wait(50)
+    # elementnewb.click()
+    browser.save_screenshot("exiterror501.png")
+    print('ex 502', str(e))
+
+try:
+    browser.save_screenshot('alert.png')
+    element = WebDriverWait(browser, 100).until(
+            EC.element_to_be_clickable((By.XPATH, '//*[@id="confirmDlg"]/div/div/div[2]/a[1]'))
+        )
+    element.click()
+except Exception as e:
+    browser.save_screenshot('alerterror511.png')
+    print("512, failed to locate alert", e)
+
+print("Third form finished")
+sys.exit()
+
+try:
+    print("fourth form submission enters")
+    browser.implicitly_wait(30)
+
+    formElement = WebDriverWait(browser, 100).until(
+        EC.presence_of_element_located((By.XPATH, "//*[contains(text(), 'Save & Continue')]"))
+    )
+
+    elementbs = WebDriverWait(browser, 100).until(
+        EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'Save & Continue')]"))
+    )
+
+    browser.implicitly_wait(20)
+    print(523, elementbs.get_attribute('type'))
+    browser.execute_script("arguments[0].click();", elementbs)
+except Exception as e:
+    # elementnewb = WebDriverWait(browser, 30).until(
+    #     EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'Save & Continue')]"))
+    # )
+    #
+    # browser.implicitly_wait(50)
+    # elementnewb.click()
+    browser.save_screenshot("thirderror532.png")
+    print('ex 533', str(e))
+
+print("fourth form finished")
+
+print("six form starts")
+
+try:
+    busElement = WebDriverWait(browser, 200).until(
+        EC.presence_of_element_located((By.XPATH, "//*[@id='newRegForm']/fieldset/h4[1]/span"))
+    )
+except Exception as e:
+    browser.save_screenshot("placeerror550.png")
+    print('ex 551', str(e))
+
+try:
+    searchElement = WebDriverWait(browser, 50).until(
+        EC.presence_of_element_located((By.ID, "onMapSerachId"))
+    )
+    browser.find_element("id", "onMapSerachId").send_keys('Coimbatore')
+    time.sleep(5)
+except Exception as e:
+    browser.save_screenshot("maperror560.png")
+    print('ex 561', str(e))
+
 time.sleep(500)
