@@ -22,8 +22,9 @@ getframe = sys._getframe
 
 def NewFifthSection(browser):
     try:
+        printMessage('New fifth form starts here', basefilename + str(getframe().f_lineno), 0)
         browser.save_screenshot("5-busaddress369.png")
-        busElement = WebDriverWait(browser, 200).until(
+        busElement = WebDriverWait(browser, 50).until(
             EC.presence_of_element_located((By.XPATH, "//*[@id='newRegForm']/fieldset/h4[1]/span"))
         )
     except Exception as e:
@@ -51,7 +52,7 @@ def NewFifthSection(browser):
         browser.save_screenshot("listElements.png")
         for list in listElements:
             if 'Coimbatore' in list.text:
-                print(list.get_attribute('innerHTML'))
+                # print(list.get_attribute('innerHTML'))
                 printMessage(list.text, basefilename + str(getframe().f_lineno), 0)
                 # print(298, list.text)
                 list.click()
@@ -134,6 +135,30 @@ def NewFifthSection(browser):
             time.sleep(0.8)
             break
 
+    browser.implicitly_wait(15)
+
+    try:
+        range = browser.find_element("id", "rgcd")
+        ranges = Select(range)
+    except Exception as e:
+        printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+        range = browser.find_element("id", "rgcd")
+        ranges = Select(range)
+
+    browser.implicitly_wait(15)
+    print('range Options loading')
+
+    # iterate over dropdown options
+    for opt in ranges.options:
+
+        if 'COIMBATORE' in opt.text:
+            sel = Select(browser.find_element("id", 'rgcd'))
+
+            sel.select_by_visible_text(opt.text)
+            printMessage(opt.text, basefilename + str(getframe().f_lineno), 0)
+            time.sleep(0.8)
+            break
+
 
     # file upload
     try:
@@ -200,9 +225,28 @@ def NewFifthSection(browser):
         browser.implicitly_wait(20)
         printMessage(elementbs.get_attribute('type'), basefilename + str(getframe().f_lineno), 0)
         browser.execute_script("arguments[0].click();", elementbs)
+        printMessage('save & continue button submitted', basefilename + str(getframe().f_lineno), 0)
     except Exception as e:
-        browser.save_screenshot("5-fourerror204.png")
+        browser.save_screenshot("5-fourerror229.png")
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
 def EditFifthSection(browser):
-    pass
+    try:
+        printMessage("fifth edit form submission enters", basefilename + str(getframe().f_lineno), 0)
+        browser.implicitly_wait(30)
+
+        formElement = WebDriverWait(browser, 100).until(
+            EC.presence_of_element_located((By.XPATH, "//*[contains(text(), 'Save & Continue')]"))
+        )
+
+        elementbs = WebDriverWait(browser, 100).until(
+            EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'Save & Continue')]"))
+        )
+
+        browser.implicitly_wait(20)
+        printMessage(elementbs.get_attribute('type'), basefilename + str(getframe().f_lineno), 0)
+        browser.execute_script("arguments[0].click();", elementbs)
+        printMessage('save & continue button submitted', basefilename + str(getframe().f_lineno), 0)
+    except Exception as e:
+        browser.save_screenshot("5-fourerror229.png")
+        printMessage(str(e), basefilename + str(getframe().f_lineno), 1)

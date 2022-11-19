@@ -2,6 +2,7 @@ import string
 import sys
 import requests
 import datetime
+import login
 
 import selenium
 from selenium import webdriver
@@ -67,7 +68,7 @@ browser.implicitly_wait(15)
 print('city Options loading')
 # iterate over dropdown options
 for opt in citys.options:
-    print(opt.text)
+    # print(opt.text)
     if 'Krishnagiri' in opt.text:
         sel = Select(browser.find_element("id", 'applnDistr'))
 
@@ -92,7 +93,7 @@ except Exception as e:
 
 try:
     browser.implicitly_wait(2)
-    browser.find_element("id", "email").send_keys('muruganaccetcse@gmail.com')
+    browser.find_element("id", "email").send_keys('murugan@eauditoroffice.com')
 except Exception as e:
     print('ex 74', str(e))
 
@@ -114,11 +115,11 @@ except Exception as e:
     print('ex 82', str(e))
 
 print(93, 'sleep')
-time.sleep(100)
-browser.implicitly_wait(200)
+time.sleep(50)
+browser.implicitly_wait(50)
 print(95, 'going to look alert')
 try:
-    elementPara = WebDriverWait(browser, 400).until(
+    elementPara = WebDriverWait(browser, 1000).until(
         EC.presence_of_element_located((By.XPATH, "/html/body/div[2]/div[2]/div/div[2]/div/div[2]/div/div[1]/div/p"))
     )
     # print(102, elementPara)
@@ -131,8 +132,9 @@ except Exception as e:
     print('ex 103', str(e))
 
 print(107, 'going to look trn no')
+trnno_new = ''
 try:
-    element = WebDriverWait(browser, 6000).until(
+    element = WebDriverWait(browser, 300).until(
             EC.presence_of_element_located((By.XPATH, "/html/body/div[2]/div[2]/div/div[2]/div/div[2]/div/div[1]/div/p/span[2]"))
         )
     trnno_val = element.text
@@ -145,14 +147,55 @@ except Exception as e:
 
 try:
     browser.save_screenshot('trnlook.png')
-    element = WebDriverWait(browser, 30).until(
+    element = WebDriverWait(browser, 100).until(
             EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div[2]/div/div[2]/div/div[2]/div/a"))
         )
-    element.click()
+    browser.execute_script("arguments[0].innerHTML = arguments[1];", element, "<h2>This is from bot,<br> please wait this window will close and <br> new window will be opened!</h2>")
 except Exception as e:
     browser.save_screenshot('trnerror.png')
     print("130, failed to locate button", e)
+#
+# elm = driver.find_element_by_xpath(".//*[@id='content']")
+# browser.execute_script("arguments[0].innerHTML = arguments[1];", elm, img);
+#
+# browser.execute_script("$('form').append('<h1>This is from bot, please wait this window will close and new window will be opened!</h1>')")
+# content = '<br><br><h1 style="color:red">This is from bot, please wait this window will close and new window will be opened!</h1><br><br>'
+# browser.execute_script(f'$("form").append({content})')
+# time.sleep(200)
+#
+# print("login process will begin here")
+# try:
+#     browser.execute_script("alert('Registration process completed, login will begin soon, please wait')")
+#
+# except Exception as e:
+#     browser.save_screenshot('ralerterror.png')
+#     print("130, failed to locate button", e)
 
+# try:
+#     alert = browser.switch_to_alert()
+#     print(alert.text)
+#     alert.accept()
+# except:
+#     print("no alert to accept")
+
+
+try:
+    if trnno_new != '':
+        browser.close()
+        browser.quit()
+        login.login_process(trnno_new)
+except Exception as e:
+    print("failed to login")
+# login button
+# try:
+#     browser.save_screenshot('trnlook.png')
+#     element = WebDriverWait(browser, 30).until(
+#             EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div[2]/div/div[2]/div/div[2]/div/a"))
+#         )
+#     element.click()
+# except Exception as e:
+#     browser.save_screenshot('trnerror.png')
+#     print("130, failed to locate button", e)
 
 # try:
 #     browser.implicitly_wait(5)
@@ -213,7 +256,7 @@ except Exception as e:
 #     browser.save_screenshot('tradeerror.png')
 #     print('ex 175', str(e))
 
-browser.execute_script("alert('Registration process completed')")
+# browser.execute_script("alert('Registration process completed')")
 
-print('Process completed')
-time.sleep(500)
+# print('Process completed')
+# time.sleep(500)

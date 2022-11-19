@@ -4,7 +4,7 @@ import requests
 import datetime
 
 import section_five
-import section_one, section_two, section_three, section_four, section_five
+import section_one, section_two, section_three, section_four, section_five, section_six, section_seven, section_eight
 from section_one import printMessage
 
 import selenium
@@ -22,260 +22,348 @@ from os.path import basename
 basefilename = basename(__file__)+' '
 getframe = sys._getframe
 
-browser = webdriver.Chrome(service=Service('chromedriver.exe'))
 
-browser.maximize_window()
-browser.get("https://reg.gst.gov.in/registration/")
+def login_process(trn_number):
+    browser = webdriver.Chrome(service=Service('chromedriver.exe'))
 
-browser.implicitly_wait(5)
+    printMessage('login window opened here', basefilename + str(getframe().f_lineno), 1)
 
-trn_number = '332200268359TRN'
+    browser.maximize_window()
+    browser.get("https://reg.gst.gov.in/registration/")
 
-try:
-    print("Start Time =", datetime.datetime.now())
-
-    trnElement = WebDriverWait(browser, 100).until(
-        EC.presence_of_element_located((By.ID, "radiotrn"))
-    )
-    browser.save_screenshot("trn.png")
-    trnfield = browser.find_element(By.CSS_SELECTOR, '#radiotrn')
-    browser.execute_script("arguments[0].click();", trnfield)
-
-except Exception as e:
-    browser.save_screenshot("trnerror.png")
-    printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
-
-try:
-    captchaElement = WebDriverWait(browser, 5).until(
-        EC.presence_of_element_located((By.ID, "trnno"))
-    ).send_keys(trn_number)
-except Exception as e:
-    printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
-
-try:
-    captchaElement = WebDriverWait(browser, 5).until(
-        EC.presence_of_element_located((By.ID, "captchatrn"))
-    ).send_keys('')
-    # browser.find_element("id", "captchatrn").send_keys('')
-except Exception as e:
-    printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
-
-try:
-    captchaElement = WebDriverWait(browser, 200).until(
-        EC.presence_of_element_located((By.ID, "mobile_otp"))
-    ).send_keys('')
-except Exception as e:
-    browser.save_screenshot("otperror.png")
-    printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
-
-try:
-    table = WebDriverWait(browser, 200).until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.table')))
-    button = WebDriverWait(browser, 50).until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.btn-primary')))
-    button.click()
-
-except Exception as e:
-    table = WebDriverWait(browser, 30).until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.table')))
-    button = WebDriverWait(browser, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.btn-primary')))
-    button.click()
-    browser.save_screenshot('applicationserr.png')
-    printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
-
-# Checking first section compleeted or not
-
-try:
     browser.implicitly_wait(5)
-    # element = browser.find_element(By.ID, "tnm")
-    elementPara = WebDriverWait(browser, 20).until(
-        EC.presence_of_element_located((By.ID, "tnm"))
-    )
-    browser.execute_script("arguments[0].scrollIntoView(true);", elementPara)
-    browser.save_screenshot('tradefocus.png')
-except Exception as e:
-    browser.save_screenshot('tradeerror.png')
-    printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
-browser.implicitly_wait(30)
+    trn_number = '332200269175TRN'
 
-try:
-    browser.implicitly_wait(50)
-    elementPara = WebDriverWait(browser, 20).until(
-        EC.element_to_be_clickable((By.ID, "tnm"))
-    )
-    # slow internet
+    try:
+        print("Start Time =", datetime.datetime.now())
 
-    if not elementPara.is_enabled():
-        elementPara = WebDriverWait(browser, 30).until(
+        trnElement = WebDriverWait(browser, 100).until(
+            EC.presence_of_element_located((By.ID, "radiotrn"))
+        )
+        browser.save_screenshot("trn.png")
+        trnfield = browser.find_element(By.CSS_SELECTOR, '#radiotrn')
+        browser.execute_script("arguments[0].click();", trnfield)
+
+    except Exception as e:
+        browser.save_screenshot("trnerror.png")
+        printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+
+    try:
+        captchaElement = WebDriverWait(browser, 5).until(
+            EC.presence_of_element_located((By.ID, "trnno"))
+        ).send_keys(trn_number)
+    except Exception as e:
+        printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+
+    try:
+        captchaElement = WebDriverWait(browser, 5).until(
+            EC.presence_of_element_located((By.ID, "captchatrn"))
+        ).send_keys('')
+        # browser.find_element("id", "captchatrn").send_keys('')
+    except Exception as e:
+        printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+
+    try:
+        captchaElement = WebDriverWait(browser, 200).until(
+            EC.presence_of_element_located((By.ID, "mobile_otp"))
+        ).send_keys('')
+    except Exception as e:
+        browser.save_screenshot("otperror.png")
+        printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+
+    try:
+        table = WebDriverWait(browser, 200).until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.table')))
+        button = WebDriverWait(browser, 50).until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.btn-primary')))
+        button.click()
+
+    except Exception as e:
+        table = WebDriverWait(browser, 30).until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.table')))
+        button = WebDriverWait(browser, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.btn-primary')))
+        button.click()
+        browser.save_screenshot('applicationserr.png')
+        printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+
+    # Checking first section compleeted or not
+
+    try:
+        browser.implicitly_wait(5)
+        # element = browser.find_element(By.ID, "tnm")
+        elementPara = WebDriverWait(browser, 20).until(
             EC.presence_of_element_located((By.ID, "tnm"))
         )
-    trnNumberExists = elementPara.get_attribute('value')
+        browser.execute_script("arguments[0].scrollIntoView(true);", elementPara)
+        browser.save_screenshot('tradefocus.png')
+    except Exception as e:
+        browser.save_screenshot('tradeerror.png')
+        printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
-    printMessage(trnNumberExists, basefilename + str(getframe().f_lineno), 0)
-    printMessage(elementPara.is_enabled(), basefilename + str(getframe().f_lineno), 0)
+    browser.implicitly_wait(30)
 
-    browser.save_screenshot('trnNumberExists.png')
-except Exception as e:
-    trnNumberExists = ''
-    browser.save_screenshot('trninerror.png')
-    printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+    try:
+        browser.implicitly_wait(50)
+        elementPara = WebDriverWait(browser, 20).until(
+            EC.element_to_be_clickable((By.ID, "tnm"))
+        )
+        # slow internet
 
-if trnNumberExists is None or trnNumberExists =='':
-    printMessage("this is new record:"+trnNumberExists, basefilename + str(getframe().f_lineno), 0)
-    section_one.NewFirstSection(browser)
+        if not elementPara.is_enabled():
+            elementPara = WebDriverWait(browser, 30).until(
+                EC.presence_of_element_located((By.ID, "tnm"))
+            )
+        trnNumberExists = elementPara.get_attribute('value')
 
-else:
-    printMessage("this is old record:" + trnNumberExists, basefilename + str(getframe().f_lineno), 0)
-    section_one.EditFirstSection(browser)
+        printMessage(trnNumberExists, basefilename + str(getframe().f_lineno), 0)
+        printMessage(elementPara.is_enabled(), basefilename + str(getframe().f_lineno), 0)
 
-print("first form completed")
-print("first end Time =", datetime.datetime.now())
-time.sleep(5)
-# sys.exit()
+        browser.save_screenshot('trnNumberExists.png')
+    except Exception as e:
+        trnNumberExists = ''
+        browser.save_screenshot('trninerror.png')
+        printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
-# Check whether second section completed or not
+    if trnNumberExists is None or trnNumberExists =='':
+        printMessage("this is new record:"+trnNumberExists, basefilename + str(getframe().f_lineno), 0)
+        section_one.NewFirstSection(browser)
 
-try:
-    elementSec = WebDriverWait(browser, 20).until(
-        EC.presence_of_element_located((By.ID, "ffname"))
-    )
-    FatherExists = elementSec.get_attribute('value')
-except Exception as e:
-    FatherExists = ''
-    browser.save_screenshot('fathererror.png')
-    printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+    else:
+        printMessage("this is old record:" + trnNumberExists, basefilename + str(getframe().f_lineno), 0)
+        section_one.EditFirstSection(browser)
 
-if FatherExists is None or FatherExists =='':
-    printMessage("this is new second record:" + FatherExists, basefilename + str(getframe().f_lineno), 0)
-    section_two.NewSecondSection(browser)
+    print("first form completed")
+    print("first end Time =", datetime.datetime.now())
+    time.sleep(5)
+    # sys.exit()
 
-else:
-    printMessage("this is old second record:" + FatherExists, basefilename + str(getframe().f_lineno), 0)
-    section_two.EditSecondSection(browser)
+    # Check whether second section completed or not
 
-time.sleep(5)
-print('Second form completed')
+    try:
+        elementSec = WebDriverWait(browser, 20).until(
+            EC.presence_of_element_located((By.ID, "ffname"))
+        )
+        FatherExists = elementSec.get_attribute('value')
+    except Exception as e:
+        FatherExists = ''
+        browser.save_screenshot('fathererror.png')
+        printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
-if FatherExists is None or FatherExists =='':
-    browser.execute_script("alert('please pick address and make sure to submit this form fully, next form only will handle by bot')")
-    time.sleep(50)
+    if FatherExists is None or FatherExists =='':
+        printMessage("this is new second record:" + FatherExists, basefilename + str(getframe().f_lineno), 0)
+        section_two.NewSecondSection(browser)
 
-# sys.exit()
-# print('Process completed, if alert shows will handle here')
+    else:
+        printMessage("this is old second record:" + FatherExists, basefilename + str(getframe().f_lineno), 0)
+        section_two.EditSecondSection(browser)
 
-# if no locality
-# try:
-#     browser.save_screenshot('alert.png')
-#     elementlist = WebDriverWait(browser, 200).until(
-#             EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div/div/div[3]/div/ul/li[2]'))
-#         )
-#     print(249, elementlist)
-#     print(250, elementlist.get_attribute('class'))
-#     if elementlist.get_attribute('class')!='complete':
-#         element = WebDriverWait(browser, 200).until(
-#                 EC.element_to_be_clickable((By.XPATH, '//*[@id="confirmDlg"]/div/div/div[2]/a[1]'))
-#             )
-#         element.click()
-# except Exception as e:
-#     browser.save_screenshot('alerterror.png')
-#     print("459, failed to locate alert", e)
+    time.sleep(5)
+    print('Second form completed')
 
-thirdCompleted = 0
-try:
-    browser.implicitly_wait(20)
-    thirdElement = WebDriverWait(browser, 50).until(
-        EC.presence_of_element_located((By.XPATH, "/html/body/div[2]/div/div/div[3]/div/ul/li[3]"))
-    )
-    printMessage(thirdElement, basefilename + str(getframe().f_lineno), 0)
-    printMessage(thirdElement.get_attribute('class'), basefilename + str(getframe().f_lineno), 0)
-    titleClass = thirdElement.get_attribute('class')
-    if titleClass == 'active complete':
-        thirdCompleted = 1
+    if FatherExists is None or FatherExists =='':
+        browser.execute_script("alert('please pick address and make sure to submit this form fully, next form only will handle by bot')")
+        time.sleep(50)
 
-except Exception as e:
-    browser.save_screenshot("thirderror192.png")
-    printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+    # sys.exit()
+    # print('Process completed, if alert shows will handle here')
 
-if thirdCompleted == 1:
-    section_three.EditThirdSection(browser)
-else:
-    section_three.NewThirdSection(browser)
+    # if no locality
+    # try:
+    #     browser.save_screenshot('alert.png')
+    #     elementlist = WebDriverWait(browser, 200).until(
+    #             EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div/div/div[3]/div/ul/li[2]'))
+    #         )
+    #     print(249, elementlist)
+    #     print(250, elementlist.get_attribute('class'))
+    #     if elementlist.get_attribute('class')!='complete':
+    #         element = WebDriverWait(browser, 200).until(
+    #                 EC.element_to_be_clickable((By.XPATH, '//*[@id="confirmDlg"]/div/div/div[2]/a[1]'))
+    #             )
+    #         element.click()
+    # except Exception as e:
+    #     browser.save_screenshot('alerterror.png')
+    #     print("459, failed to locate alert", e)
 
-# if no locality
-# try:
-#     browser.save_screenshot('alert.png')
-#     element = WebDriverWait(browser, 100).until(
-#             EC.element_to_be_clickable((By.XPATH, '//*[@id="confirmDlg"]/div/div/div[2]/a[1]'))
-#         )
-#     element.click()
-# except Exception as e:
-#     browser.save_screenshot('alerterror511.png')
-#     print("512, failed to locate alert", e)
+    thirdCompleted = 0
+    try:
+        browser.implicitly_wait(20)
+        thirdElement = WebDriverWait(browser, 50).until(
+            EC.presence_of_element_located((By.XPATH, "/html/body/div[2]/div/div/div[3]/div/ul/li[3]"))
+        )
+        printMessage(thirdElement, basefilename + str(getframe().f_lineno), 0)
+        printMessage(thirdElement.get_attribute('class'), basefilename + str(getframe().f_lineno), 0)
+        titleClass = thirdElement.get_attribute('class')
+        if titleClass == 'active complete':
+            thirdCompleted = 1
 
-# try:
-#     print("second form final submission enters")
-#     browser.implicitly_wait(20)
-#
-#     elementbs = WebDriverWait(browser, 30).until(
-#         EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'Save & Continue')]"))
-#     )
-#
-#     browser.implicitly_wait(30)
-#     print(492, elementbs.get_attribute('type'))
-#     elementbs.click()
-# except Exception as e:
-#     browser.save_screenshot("exiterror501.png")
-#     print('ex 502', str(e))
+    except Exception as e:
+        browser.save_screenshot("thirderror192.png")
+        printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
-print("Third form finished")
-time.sleep(20)
-# sys.exit()
+    if thirdCompleted == 1:
+        section_three.EditThirdSection(browser)
+    else:
+        section_three.NewThirdSection(browser)
 
-fourthCompleted = 0
-try:
-    browser.implicitly_wait(10)
-    fourthElement = WebDriverWait(browser, 50).until(
-        EC.presence_of_element_located((By.XPATH, "/html/body/div[2]/div/div/div[3]/div/ul/li[4]"))
-    )
-    printMessage(fourthElement, basefilename + str(getframe().f_lineno), 0)
-    printMessage(fourthElement.get_attribute('class'), basefilename + str(getframe().f_lineno), 0)
-    titleClass = fourthElement.get_attribute('class')
-    if titleClass == 'active complete':
-        fourthCompleted = 1
+    # if no locality
+    # try:
+    #     browser.save_screenshot('alert.png')
+    #     element = WebDriverWait(browser, 100).until(
+    #             EC.element_to_be_clickable((By.XPATH, '//*[@id="confirmDlg"]/div/div/div[2]/a[1]'))
+    #         )
+    #     element.click()
+    # except Exception as e:
+    #     browser.save_screenshot('alerterror511.png')
+    #     print("512, failed to locate alert", e)
 
-except Exception as e:
-    browser.save_screenshot("fourtherror243.png")
-    printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+    # try:
+    #     print("second form final submission enters")
+    #     browser.implicitly_wait(20)
+    #
+    #     elementbs = WebDriverWait(browser, 30).until(
+    #         EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'Save & Continue')]"))
+    #     )
+    #
+    #     browser.implicitly_wait(30)
+    #     print(492, elementbs.get_attribute('type'))
+    #     elementbs.click()
+    # except Exception as e:
+    #     browser.save_screenshot("exiterror501.png")
+    #     print('ex 502', str(e))
 
-if fourthCompleted == 1:
-    section_four.EditFourthSection(browser)
-else:
-    section_four.NewFourthSection(browser)
+    print("Third form finished")
+    time.sleep(10)
+    # sys.exit()
 
-print("fourth form finished")
+    fourthCompleted = 0
+    try:
+        browser.implicitly_wait(10)
+        fourthElement = WebDriverWait(browser, 50).until(
+            EC.presence_of_element_located((By.XPATH, "/html/body/div[2]/div/div/div[3]/div/ul/li[4]"))
+        )
+        printMessage(fourthElement, basefilename + str(getframe().f_lineno), 0)
+        printMessage(fourthElement.get_attribute('class'), basefilename + str(getframe().f_lineno), 0)
+        titleClass = fourthElement.get_attribute('class')
+        if titleClass == 'active complete':
+            fourthCompleted = 1
 
-time.sleep(10)
+    except Exception as e:
+        browser.save_screenshot("fourtherror243.png")
+        printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
-fifthCompleted = 0
-try:
-    browser.implicitly_wait(20)
-    fifthElement = WebDriverWait(browser, 50).until(
-        EC.presence_of_element_located((By.XPATH, "/html/body/div[2]/div/div/div[3]/div/ul/li[5]"))
-    )
-    printMessage(fifthElement, basefilename + str(getframe().f_lineno), 0)
-    printMessage(fifthElement.get_attribute('class'), basefilename + str(getframe().f_lineno), 0)
-    titleClass = fifthElement.get_attribute('class')
-    if titleClass == 'active complete':
-        fifthCompleted = 1
+    if fourthCompleted == 1:
+        section_four.EditFourthSection(browser)
+    else:
+        section_four.NewFourthSection(browser)
 
-except Exception as e:
-    browser.save_screenshot("fiftherror268.png")
-    printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+    print("fourth form finished")
 
-print("fifth form starts")
+    time.sleep(10)
 
-if fifthCompleted == 1:
-    section_five.EditFifthSection(browser)
-else:
-    section_five.NewFifthSection(browser)
+    fifthCompleted = 0
+    try:
+        browser.implicitly_wait(20)
+        fifthElement = WebDriverWait(browser, 50).until(
+            EC.presence_of_element_located((By.XPATH, "/html/body/div[2]/div/div/div[3]/div/ul/li[5]"))
+        )
+        printMessage(fifthElement, basefilename + str(getframe().f_lineno), 0)
+        printMessage(fifthElement.get_attribute('class'), basefilename + str(getframe().f_lineno), 0)
+        titleClass = fifthElement.get_attribute('class')
+        if titleClass == 'active complete':
+            fifthCompleted = 1
 
+    except Exception as e:
+        browser.save_screenshot("fiftherror268.png")
+        printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
-time.sleep(1000)
+    print("fifth form starts")
+
+    if fifthCompleted == 1:
+        section_five.EditFifthSection(browser)
+    else:
+        section_five.NewFifthSection(browser)
+
+    print("fifth form Submitted")
+
+    time.sleep(10)
+
+    sixthCompleted = 0
+    try:
+        browser.implicitly_wait(20)
+        sixthElement = WebDriverWait(browser, 50).until(
+            EC.presence_of_element_located((By.XPATH, "/html/body/div[2]/div/div/div[3]/div/ul/li[6]"))
+        )
+        printMessage(sixthElement, basefilename + str(getframe().f_lineno), 0)
+        printMessage(sixthElement.get_attribute('class'), basefilename + str(getframe().f_lineno), 0)
+        titleClass = sixthElement.get_attribute('class')
+        if titleClass == 'active complete':
+            sixthCompleted = 1
+
+    except Exception as e:
+        browser.save_screenshot("sixtherror268.png")
+        printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+
+    print("sixth form starts")
+
+    if sixthCompleted == 1:
+        section_six.EditSixthSection(browser)
+    else:
+        section_six.NewSixthSection(browser)
+
+    print("sixth form submitted")
+
+    time.sleep(10)
+
+    SeventhCompleted = 0
+    try:
+        browser.implicitly_wait(20)
+        seventhElement = WebDriverWait(browser, 50).until(
+            EC.presence_of_element_located((By.XPATH, "/html/body/div[2]/div/div/div[3]/div/ul/li[7]"))
+        )
+        printMessage(seventhElement, basefilename + str(getframe().f_lineno), 0)
+        printMessage(seventhElement.get_attribute('class'), basefilename + str(getframe().f_lineno), 0)
+        titleClass = seventhElement.get_attribute('class')
+        if titleClass == 'active complete':
+            SeventhCompleted = 1
+
+    except Exception as e:
+        browser.save_screenshot("seventherror324.png")
+        printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+
+    print("seventh form starts")
+
+    if SeventhCompleted == 1:
+        section_seven.EditSeventhSection(browser)
+    else:
+        section_seven.NewSeventhSection(browser)
+
+    print("seventh form submitted")
+
+    time.sleep(10)
+
+    EighthCompleted = 0
+    try:
+        browser.implicitly_wait(20)
+        EighthElement = WebDriverWait(browser, 50).until(
+            EC.presence_of_element_located((By.XPATH, "/html/body/div[2]/div/div/div[3]/div/ul/li[8]"))
+        )
+        printMessage(EighthElement, basefilename + str(getframe().f_lineno), 0)
+        printMessage(EighthElement.get_attribute('class'), basefilename + str(getframe().f_lineno), 0)
+        titleClass = EighthElement.get_attribute('class')
+        if titleClass == 'active complete':
+            EighthCompleted = 1
+
+    except Exception as e:
+        browser.save_screenshot("eighterror351.png")
+        printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+
+    print("eighth form starts")
+
+    if EighthCompleted == 1:
+        section_eight.EditEighthSection(browser)
+    else:
+        section_eight.NewEighthSection(browser)
+
+    print("eighth form submitted")
+
+    browser.execute_script("alert('Process Completed')")
+
+    time.sleep(2000)
