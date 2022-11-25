@@ -20,7 +20,8 @@ from os.path import basename
 basefilename = basename(__file__)+' '
 getframe = sys._getframe
 
-def NewFifthSection(browser):
+def NewFifthSection(browser, userData):
+    addressData = userData['businesses'][0]
     try:
         printMessage('New fifth form starts here', basefilename + str(getframe().f_lineno), 0)
         browser.save_screenshot("5-busaddress369.png")
@@ -73,43 +74,55 @@ def NewFifthSection(browser):
         browser.save_screenshot("5-reserror.png")
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
+    # try:
+    #     printMessage("looking for jurisdiction", basefilename + str(getframe().f_lineno), 0)
+    #     browser.implicitly_wait(20)
+    #
+    #     formElement = WebDriverWait(browser, 400).until(
+    #         EC.presence_of_element_located((By.XPATH, "//*[@id='stj']/option[2]"))
+    #     )
+    #     formElement.click()
+    #     printMessage(formElement.text, basefilename + str(getframe().f_lineno), 0)
+    # except Exception as e:
+    #     browser.save_screenshot("5-reserror.png")
+    #     printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+
     printMessage("autocompletion finished", basefilename + str(getframe().f_lineno), 0)
 
-    browser.execute_script("alert('please pick address and make sure to fill address deyails, from jurisdiction will handle by bot')")
-    time.sleep(40)
+    browser.execute_script(
+        "alert('please pick address and make sure to fill address details, from jurisdiction will handle by bot')")
+    time.sleep(30)
+
     try:
-        printMessage("looking for jurisdiction", basefilename + str(getframe().f_lineno), 0)
         browser.implicitly_wait(20)
 
         formElement = WebDriverWait(browser, 400).until(
-            EC.presence_of_element_located((By.XPATH, "//*[@id='stj']/option[2]"))
+            EC.presence_of_element_located((By.XPATH, "//*[@id='comcd']/option[2]"))
         )
         formElement.click()
-        printMessage(formElement.text, basefilename + str(getframe().f_lineno), 0)
-    except Exception as e:
-        browser.save_screenshot("5-reserror.png")
-        printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
-
-    try:
-        stat = browser.find_element("id", "comcd")
-        statt = Select(stat)
     except Exception as e:
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
-        stat = browser.find_element("id", "comcd")
-        statt = Select(stat)
 
-    printMessage('Commissionerate Options loading', basefilename + str(getframe().f_lineno), 0)
-    # iterate over dropdown options
-    for opt in statt.options:
-
-        if 'COIMBATORE' in opt.text:
-            sel = Select(browser.find_element("id", 'comcd'))
-
-            sel.select_by_visible_text(opt.text)
-            printMessage(opt.text, basefilename + str(getframe().f_lineno), 0)
-
-            time.sleep(0.8)
-            break
+    # try:
+    #     stat = browser.find_element("id", "comcd")
+    #     statt = Select(stat)
+    # except Exception as e:
+    #     printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+    #     stat = browser.find_element("id", "comcd")
+    #     statt = Select(stat)
+    #
+    # printMessage('Commissionerate Options loading', basefilename + str(getframe().f_lineno), 0)
+    # # iterate over dropdown options
+    # for opt in statt.options:
+    #
+    #     if 'COIMBATORE' in opt.text:
+    #         sel = Select(browser.find_element("id", 'comcd'))
+    #
+    #         sel.select_by_visible_text(opt.text)
+    #         printMessage(opt.text, basefilename + str(getframe().f_lineno), 0)
+    #
+    #         time.sleep(0.8)
+    #         break
 
     browser.implicitly_wait(15)
 
@@ -127,13 +140,12 @@ def NewFifthSection(browser):
     # iterate over dropdown options
     for opt in citys.options:
 
-        if 'COIMBATORE' in opt.text:
-            sel = Select(browser.find_element("id", 'divcd'))
+        sel = Select(browser.find_element("id", 'divcd'))
 
-            sel.select_by_visible_text(opt.text)
-            printMessage(opt.text, basefilename + str(getframe().f_lineno), 0)
-            time.sleep(0.8)
-            break
+        sel.select_by_visible_text(opt.text)
+        printMessage(opt.text, basefilename + str(getframe().f_lineno), 0)
+        time.sleep(0.8)
+        break
 
     browser.implicitly_wait(15)
 
@@ -151,64 +163,55 @@ def NewFifthSection(browser):
     # iterate over dropdown options
     for opt in ranges.options:
 
-        if 'COIMBATORE' in opt.text:
-            sel = Select(browser.find_element("id", 'rgcd'))
+        sel = Select(browser.find_element("id", 'rgcd'))
 
-            sel.select_by_visible_text(opt.text)
-            printMessage(opt.text, basefilename + str(getframe().f_lineno), 0)
-            time.sleep(0.8)
-            break
+        sel.select_by_visible_text(opt.text)
+        printMessage(opt.text, basefilename + str(getframe().f_lineno), 0)
+        time.sleep(0.8)
+        break
 
 
     # file upload
     try:
         sel = Select(browser.find_element("id", 'bp_buss_poss'))
-        sel.select_by_value('CON')
+        sel.select_by_value(addressData['nature_profession'])
 
     except Exception as e:
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
     browser.implicitly_wait(15)
+    print(addressData)
 
-    try:
-        proof = browser.find_element("id", "bp_up_type")
-        proofs = Select(proof)
-    except Exception as e:
-        printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
-        proof = browser.find_element("id", "bp_up_type")
-        proofs = Select(proof)
+    for proofDb in addressData['proofs']:
 
-    browser.implicitly_wait(15)
-    print('Proof Options loading')
-
-    # iterate over dropdown options
-    for opt in proofs.options:
-
-        if 'Consent Letter' in opt.text:
+        try:
             sel = Select(browser.find_element("id", 'bp_up_type'))
+            browser.implicitly_wait(10)
+            sel.select_by_value(proofDb['business_place_proof'])
 
-            sel.select_by_visible_text(opt.text)
-            printMessage(opt.text, basefilename + str(getframe().f_lineno), 0)
-            time.sleep(0.8)
-            break
+        except Exception as e:
+            printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
-    try:
-        fileElement = WebDriverWait(browser, 200).until(
-            EC.presence_of_element_located((By.ID, "bp_upload"))
-        ).send_keys('C:\\Users\\Murugan\\Desktop\\WhatsApp.jpeg')
-    except Exception as e:
-        browser.save_screenshot("5-file.png")
-        printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+        try:
+            fileElement = WebDriverWait(browser, 200).until(
+                EC.presence_of_element_located((By.ID, "bp_upload"))
+            ).send_keys('C:\\Users\\Murugan\\Desktop\\WhatsApp.jpeg')
+        except Exception as e:
+            browser.save_screenshot("5-file.png")
+            printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
-    try:
-        business_type = 'Retail Business'
-        forname = browser.find_element(By.XPATH, "//li//label[contains( text( ), '" + business_type + "')]").get_attribute(
-            'for')
-        activity = browser.find_element(By.CSS_SELECTOR, '#' + forname)
-        browser.execute_script("arguments[0].click();", activity)
-    except Exception as e:
-        browser.save_screenshot("5-business.png")
-        printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+    busTypeDb = addressData['naturebusact'].split(',')
+
+    for bustype in busTypeDb:
+        try:
+            # business_type = 'Retail Business'
+            # forname = browser.find_element(By.XPATH, "//li//label[contains( text( ), '" + business_type + "')]").get_attribute(
+            #     'for')
+            activity = browser.find_element(By.CSS_SELECTOR, '#' + bustype)
+            browser.execute_script("arguments[0].click();", activity)
+        except Exception as e:
+            browser.save_screenshot("5-business.png")
+            printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
     try:
         printMessage("fifth form submission enters", basefilename + str(getframe().f_lineno), 0)
@@ -230,7 +233,7 @@ def NewFifthSection(browser):
         browser.save_screenshot("5-fourerror229.png")
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
-def EditFifthSection(browser):
+def EditFifthSection(browser, userData):
     try:
         printMessage("fifth edit form submission enters", basefilename + str(getframe().f_lineno), 0)
         browser.implicitly_wait(30)

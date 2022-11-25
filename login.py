@@ -23,7 +23,7 @@ basefilename = basename(__file__)+' '
 getframe = sys._getframe
 
 
-def login_process(trn_number):
+def login_process(trn_number, userData):
     browser = webdriver.Chrome(service=Service('chromedriver.exe'))
 
     printMessage('login window opened here', basefilename + str(getframe().f_lineno), 1)
@@ -33,7 +33,7 @@ def login_process(trn_number):
 
     browser.implicitly_wait(5)
 
-    trn_number = '332200269175TRN'
+    # trn_number = '332200269175TRN'
 
     try:
         print("Start Time =", datetime.datetime.now())
@@ -50,7 +50,7 @@ def login_process(trn_number):
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
     try:
-        captchaElement = WebDriverWait(browser, 5).until(
+        captchaElement = WebDriverWait(browser, 10).until(
             EC.presence_of_element_located((By.ID, "trnno"))
         ).send_keys(trn_number)
     except Exception as e:
@@ -65,7 +65,7 @@ def login_process(trn_number):
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
     try:
-        captchaElement = WebDriverWait(browser, 200).until(
+        captchaElement = WebDriverWait(browser, 250).until(
             EC.presence_of_element_located((By.ID, "mobile_otp"))
         ).send_keys('')
     except Exception as e:
@@ -101,8 +101,8 @@ def login_process(trn_number):
     browser.implicitly_wait(30)
 
     try:
-        browser.implicitly_wait(50)
-        elementPara = WebDriverWait(browser, 20).until(
+        # browser.implicitly_wait(50)
+        elementPara = WebDriverWait(browser, 100).until(
             EC.element_to_be_clickable((By.ID, "tnm"))
         )
         # slow internet
@@ -124,11 +124,11 @@ def login_process(trn_number):
 
     if trnNumberExists is None or trnNumberExists =='':
         printMessage("this is new record:"+trnNumberExists, basefilename + str(getframe().f_lineno), 0)
-        section_one.NewFirstSection(browser)
+        section_one.NewFirstSection(browser, userData)
 
     else:
         printMessage("this is old record:" + trnNumberExists, basefilename + str(getframe().f_lineno), 0)
-        section_one.EditFirstSection(browser)
+        section_one.EditFirstSection(browser, userData)
 
     print("first form completed")
     print("first end Time =", datetime.datetime.now())
@@ -138,7 +138,7 @@ def login_process(trn_number):
     # Check whether second section completed or not
 
     try:
-        elementSec = WebDriverWait(browser, 20).until(
+        elementSec = WebDriverWait(browser, 30).until(
             EC.presence_of_element_located((By.ID, "ffname"))
         )
         FatherExists = elementSec.get_attribute('value')
@@ -149,11 +149,11 @@ def login_process(trn_number):
 
     if FatherExists is None or FatherExists =='':
         printMessage("this is new second record:" + FatherExists, basefilename + str(getframe().f_lineno), 0)
-        section_two.NewSecondSection(browser)
+        section_two.NewSecondSection(browser, userData)
 
     else:
         printMessage("this is old second record:" + FatherExists, basefilename + str(getframe().f_lineno), 0)
-        section_two.EditSecondSection(browser)
+        section_two.EditSecondSection(browser, userData)
 
     time.sleep(5)
     print('Second form completed')
@@ -184,8 +184,8 @@ def login_process(trn_number):
 
     thirdCompleted = 0
     try:
-        browser.implicitly_wait(20)
-        thirdElement = WebDriverWait(browser, 50).until(
+        browser.implicitly_wait(10)
+        thirdElement = WebDriverWait(browser, 80).until(
             EC.presence_of_element_located((By.XPATH, "/html/body/div[2]/div/div/div[3]/div/ul/li[3]"))
         )
         printMessage(thirdElement, basefilename + str(getframe().f_lineno), 0)
@@ -199,9 +199,9 @@ def login_process(trn_number):
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
     if thirdCompleted == 1:
-        section_three.EditThirdSection(browser)
+        section_three.EditThirdSection(browser, userData)
     else:
-        section_three.NewThirdSection(browser)
+        section_three.NewThirdSection(browser, userData)
 
     # if no locality
     # try:
@@ -236,7 +236,7 @@ def login_process(trn_number):
     fourthCompleted = 0
     try:
         browser.implicitly_wait(10)
-        fourthElement = WebDriverWait(browser, 50).until(
+        fourthElement = WebDriverWait(browser, 100).until(
             EC.presence_of_element_located((By.XPATH, "/html/body/div[2]/div/div/div[3]/div/ul/li[4]"))
         )
         printMessage(fourthElement, basefilename + str(getframe().f_lineno), 0)
@@ -250,9 +250,9 @@ def login_process(trn_number):
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
     if fourthCompleted == 1:
-        section_four.EditFourthSection(browser)
+        section_four.EditFourthSection(browser, userData)
     else:
-        section_four.NewFourthSection(browser)
+        section_four.NewFourthSection(browser, userData)
 
     print("fourth form finished")
 
@@ -260,8 +260,8 @@ def login_process(trn_number):
 
     fifthCompleted = 0
     try:
-        browser.implicitly_wait(20)
-        fifthElement = WebDriverWait(browser, 50).until(
+        browser.implicitly_wait(10)
+        fifthElement = WebDriverWait(browser, 100).until(
             EC.presence_of_element_located((By.XPATH, "/html/body/div[2]/div/div/div[3]/div/ul/li[5]"))
         )
         printMessage(fifthElement, basefilename + str(getframe().f_lineno), 0)
@@ -277,9 +277,9 @@ def login_process(trn_number):
     print("fifth form starts")
 
     if fifthCompleted == 1:
-        section_five.EditFifthSection(browser)
+        section_five.EditFifthSection(browser, userData)
     else:
-        section_five.NewFifthSection(browser)
+        section_five.NewFifthSection(browser, userData)
 
     print("fifth form Submitted")
 
@@ -287,8 +287,8 @@ def login_process(trn_number):
 
     sixthCompleted = 0
     try:
-        browser.implicitly_wait(20)
-        sixthElement = WebDriverWait(browser, 50).until(
+        browser.implicitly_wait(10)
+        sixthElement = WebDriverWait(browser, 100).until(
             EC.presence_of_element_located((By.XPATH, "/html/body/div[2]/div/div/div[3]/div/ul/li[6]"))
         )
         printMessage(sixthElement, basefilename + str(getframe().f_lineno), 0)
@@ -304,9 +304,9 @@ def login_process(trn_number):
     print("sixth form starts")
 
     if sixthCompleted == 1:
-        section_six.EditSixthSection(browser)
+        section_six.EditSixthSection(browser, userData)
     else:
-        section_six.NewSixthSection(browser)
+        section_six.NewSixthSection(browser, userData)
 
     print("sixth form submitted")
 
@@ -314,8 +314,8 @@ def login_process(trn_number):
 
     SeventhCompleted = 0
     try:
-        browser.implicitly_wait(20)
-        seventhElement = WebDriverWait(browser, 50).until(
+        browser.implicitly_wait(10)
+        seventhElement = WebDriverWait(browser, 100).until(
             EC.presence_of_element_located((By.XPATH, "/html/body/div[2]/div/div/div[3]/div/ul/li[7]"))
         )
         printMessage(seventhElement, basefilename + str(getframe().f_lineno), 0)
@@ -331,9 +331,9 @@ def login_process(trn_number):
     print("seventh form starts")
 
     if SeventhCompleted == 1:
-        section_seven.EditSeventhSection(browser)
+        section_seven.EditSeventhSection(browser, userData)
     else:
-        section_seven.NewSeventhSection(browser)
+        section_seven.NewSeventhSection(browser, userData)
 
     print("seventh form submitted")
 
@@ -341,8 +341,8 @@ def login_process(trn_number):
 
     EighthCompleted = 0
     try:
-        browser.implicitly_wait(20)
-        EighthElement = WebDriverWait(browser, 50).until(
+        browser.implicitly_wait(10)
+        EighthElement = WebDriverWait(browser, 100).until(
             EC.presence_of_element_located((By.XPATH, "/html/body/div[2]/div/div/div[3]/div/ul/li[8]"))
         )
         printMessage(EighthElement, basefilename + str(getframe().f_lineno), 0)
@@ -358,9 +358,9 @@ def login_process(trn_number):
     print("eighth form starts")
 
     if EighthCompleted == 1:
-        section_eight.EditEighthSection(browser)
+        section_eight.EditEighthSection(browser, userData)
     else:
-        section_eight.NewEighthSection(browser)
+        section_eight.NewEighthSection(browser, userData)
 
     print("eighth form submitted")
 

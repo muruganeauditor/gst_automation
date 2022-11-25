@@ -20,7 +20,9 @@ from os.path import basename
 basefilename = basename(__file__)+' '
 getframe = sys._getframe
 
-def NewSecondSection(browser):
+def NewSecondSection(browser, userData):
+    global datetime
+    promotorData = userData['promotors'][0]
     try:
         printMessage("Entering into second new form", basefilename + str(getframe().f_lineno), 0)
         browser.implicitly_wait(10)
@@ -32,7 +34,7 @@ def NewSecondSection(browser):
         browser.save_screenshot('2-fatherfocus.png')
         fnameElement = WebDriverWait(browser, 5).until(
             EC.presence_of_element_located((By.ID, "ffname"))
-        ).send_keys('Palani')
+        ).send_keys(promotorData['father_firstname'])
     except Exception as e:
         browser.save_screenshot('2-fathererror.png')
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
@@ -41,17 +43,21 @@ def NewSecondSection(browser):
         browser.implicitly_wait(10)
         fnameElement = WebDriverWait(browser, 10).until(
             EC.presence_of_element_located((By.ID, "pd_flname"))
-        ).send_keys('Vediyappan')
+        ).send_keys(promotorData['father_lastname'] if promotorData['father_lastname']!='null' else '' )
     except Exception as e:
         browser.save_screenshot('2-fatherlerror.png')
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+
+    format = '%Y-%m-%d'
+    datetime = datetime.datetime.strptime(promotorData['dob'], format)
+    promotorData['dob'] = datetime.date().strftime("%d%m%Y")
 
     try:
         browser.implicitly_wait(20)
         dobElementnew = WebDriverWait(browser, 200).until(
             EC.presence_of_element_located((By.ID, "dob"))
         )
-        browser.execute_script("arguments[0].setAttribute('value',arguments[1])", dobElementnew, '10051990')
+        browser.execute_script("arguments[0].setAttribute('value',arguments[1])", dobElementnew, promotorData['dob'])
 
         # elementdob = WebDriverWait(browser, 20).until(
         #     EC.presence_of_element_located((By.ID, "dob"))
@@ -66,10 +72,10 @@ def NewSecondSection(browser):
         if dobExists=='' or dobExists=='DD/MM/YYYY':
             dobElement = WebDriverWait(browser, 200).until(
                 EC.presence_of_element_located((By.ID, "dob"))
-            ).send_keys('10051990')
+            ).send_keys(promotorData['dob'])
             browser.save_screenshot("2-dobmpty57.png")
 
-            browser.find_element("id", "dob").send_keys('10051990')
+            browser.find_element("id", "dob").send_keys(promotorData['dob'])
             printMessage(dobElement, basefilename + str(getframe().f_lineno), 0)
 
     except Exception as e:
@@ -79,7 +85,7 @@ def NewSecondSection(browser):
     try:
         mobileElement = WebDriverWait(browser, 50).until(
             EC.presence_of_element_located((By.ID, "mbno"))
-        ).send_keys('9585393730')
+        ).send_keys(promotorData['personal_mobile'])
     except Exception as e:
         browser.save_screenshot("2-mobileerror.png")
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
@@ -87,16 +93,20 @@ def NewSecondSection(browser):
     try:
         mobileElement = WebDriverWait(browser, 50).until(
             EC.presence_of_element_located((By.ID, "pd_email"))
-        ).send_keys('murugan@eauditoroffice.com')
+        ).send_keys(promotorData['personal_email'])
     except Exception as e:
         browser.save_screenshot("2-emailerror.png")
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
     try:
         browser.implicitly_wait(5)
-        gender = 'Male'
-
-        genderfield = browser.find_element(By.CSS_SELECTOR, '#radiomale')
+        if promotorData['gender']=='Male':
+            radioId = '#radiomale'
+        elif promotorData['gender']=='Female':
+            radioId = '#radiofemale'
+        else:
+            radioId = '#radioothers'
+        genderfield = browser.find_element(By.CSS_SELECTOR, radioId)
         # print(gender, genderfield)
         browser.execute_script("arguments[0].click();", genderfield)
     except Exception as e:
@@ -105,7 +115,7 @@ def NewSecondSection(browser):
     try:
         desElement = WebDriverWait(browser, 50).until(
             EC.presence_of_element_located((By.ID, "dg"))
-        ).send_keys('Proprietor')
+        ).send_keys(promotorData['designation_status'])
     except Exception as e:
         browser.save_screenshot("2-proerror.png")
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
@@ -147,7 +157,7 @@ def NewSecondSection(browser):
         searchElement = WebDriverWait(browser, 50).until(
             EC.presence_of_element_located((By.ID, "onMapSerachId"))
         )
-        browser.find_element("id", "onMapSerachId").send_keys('635204')
+        browser.find_element("id", "onMapSerachId").send_keys('635202')
         browser.find_element("id", "onMapSerachId").send_keys('')
         time.sleep(5)
     except Exception as e:
@@ -223,7 +233,7 @@ def NewSecondSection(browser):
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
 
-def EditSecondSection(browser):
+def EditSecondSection(browser, userData):
     try:
         printMessage("second form edit submission enters", basefilename + str(getframe().f_lineno), 0)
 

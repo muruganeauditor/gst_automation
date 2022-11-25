@@ -17,10 +17,11 @@ import section_one
 from section_one import printMessage
 from os.path import basename
 
-basefilename = basename(__file__)+' '
+basefilename = basename(__file__) + ' '
 getframe = sys._getframe
 
-def NewFourthSection(browser):
+
+def NewFourthSection(browser, userData):
     try:
         printMessage("fourth form submission enters", basefilename + str(getframe().f_lineno), 0)
         browser.implicitly_wait(10)
@@ -40,5 +41,6 @@ def NewFourthSection(browser):
         browser.save_screenshot("4-fourerror532.png")
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
-def EditFourthSection(browser):
+
+def EditFourthSection(browser, userData):
     pass

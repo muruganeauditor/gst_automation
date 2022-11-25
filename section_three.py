@@ -20,7 +20,7 @@ from os.path import basename
 basefilename = basename(__file__)+' '
 getframe = sys._getframe
 
-def NewThirdSection(browser):
+def NewThirdSection(browser, userData):
     try:
         printMessage("New Third form enters here", basefilename + str(getframe().f_lineno), 0)
 
@@ -88,7 +88,7 @@ def NewThirdSection(browser):
         browser.save_screenshot('3-alerterror.png')
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
-def EditThirdSection(browser):
+def EditThirdSection(browser, userData):
     try:
         printMessage('Edit Third form submission entry', basefilename + str(getframe().f_lineno), 0)
 

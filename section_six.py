@@ -20,7 +20,7 @@ from os.path import basename
 basefilename = basename(__file__)+' '
 getframe = sys._getframe
 
-def NewSixthSection(browser):
+def NewSixthSection(browser, userData):
     try:
         printMessage('New Sixth form submission entry', basefilename + str(getframe().f_lineno), 0)
 
@@ -43,7 +43,7 @@ def NewSixthSection(browser):
         browser.save_screenshot("6-exiterror109.png")
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
-def EditSixthSection(browser):
+def EditSixthSection(browser, userData):
     try:
         printMessage('Edit Sixth form submission entry', basefilename + str(getframe().f_lineno), 0)
 
