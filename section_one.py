@@ -28,6 +28,7 @@ def NewFirstSection(browser, userData):
         elementPara = WebDriverWait(browser, 20).until(
             EC.presence_of_element_located((By.ID, "tnm"))
         ).send_keys(userData['trade_name'])
+        browser.save_screenshot('steps/one-sectionnew-start.png')
         # browser.find_element("id", "tnm").send_keys('Test trades')
     except Exception as e:
         browser.save_screenshot('1-trade_error.png')
@@ -77,7 +78,7 @@ def NewFirstSection(browser, userData):
 
     try:
         browser.implicitly_wait(20)
-        elementbs = WebDriverWait(browser, 30).until(
+        elementbs = WebDriverWait(browser, 50).until(
             EC.element_to_be_clickable((By.XPATH, "//*[@id='newRegForm']/fieldset/div[1]/div[7]/div/div[2]/div/span[2]"))
         )
         elementbs.click()
@@ -193,7 +194,7 @@ def NewFirstSection(browser, userData):
             browser.implicitly_wait(10)
             fileElement = WebDriverWait(browser, 200).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "input[name='bd_upload']"))
-            ).send_keys('C:\\Users\\Murugan\\Desktop\\WhatsApp.jpeg')
+            ).send_keys('C:\\Users\\Liva\\Desktop\\download.jpg')
         except Exception as e:
             browser.save_screenshot("1-file.png")
             printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
@@ -230,7 +231,7 @@ def NewFirstSection(browser, userData):
         element = WebDriverWait(browser, 50).until(
             EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'Save & Continue')]"))
         )
-
+        browser.save_screenshot('steps/one-sectionnew-end.png')
         # print(145, element)
         browser.implicitly_wait(30)
         printMessage(element.get_attribute('type'), basefilename + str(getframe().f_lineno), 0)
@@ -255,13 +256,14 @@ def EditFirstSection(browser, userData):
         element = WebDriverWait(browser, 100).until(
             EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'Save & Continue')]"))
         )
-
+        browser.save_screenshot('steps/one-sectionedit-start.png')
         # print(145, element)
         browser.implicitly_wait(10)
         printMessage(element.get_attribute('type'), basefilename + str(getframe().f_lineno), 0)
         # element.click()
         browser.execute_script("arguments[0].click();", element)
         printMessage('save and continue works', basefilename + str(getframe().f_lineno), 0)
+
     except Exception as e:
         # elementnew = WebDriverWait(browser, 30).until(
         #     EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'Save & Continue')]"))

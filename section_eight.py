@@ -25,7 +25,7 @@ def NewEighthSection(browser, userData):
         printMessage('New Eighth form submission entry', basefilename + str(getframe().f_lineno), 0)
 
         browser.implicitly_wait(20)
-
+        browser.save_screenshot('steps/eight-sectionnew-start.png')
         elementbs = WebDriverWait(browser, 30).until(
             EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'Save & Continue')]"))
         )
@@ -46,7 +46,7 @@ def EditEighthSection(browser, userData):
         printMessage('Edit Eighth form submission entry', basefilename + str(getframe().f_lineno), 0)
 
         browser.implicitly_wait(20)
-
+        browser.save_screenshot('eight-sectionedit-start.png')
         elementbs = WebDriverWait(browser, 30).until(
             EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'Save & Continue')]"))
         )

@@ -25,7 +25,7 @@ def NewSixthSection(browser, userData):
         printMessage('New Sixth form submission entry', basefilename + str(getframe().f_lineno), 0)
 
         browser.implicitly_wait(30)
-
+        browser.save_screenshot('steps/six-sectionnew-start.png')
         elementbs = WebDriverWait(browser, 30).until(
             EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'Continue')]"))
         )
@@ -44,6 +44,7 @@ def NewSixthSection(browser, userData):
         form_submitted = 0
         browser.save_screenshot("6-exiterror109.png")
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+    browser.save_screenshot('steps/six-sectionnew-end.png')
 
     if form_submitted==0:
         try:
@@ -70,23 +71,26 @@ def NewSixthSection(browser, userData):
             browser.save_screenshot("6-exiterror71.png")
             printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
+
 def EditSixthSection(browser, userData):
     try:
         printMessage('Edit Sixth form submission entry', basefilename + str(getframe().f_lineno), 0)
 
         browser.implicitly_wait(30)
-
+        browser.save_screenshot('steps/six-sectionedit-start.png')
         elementbs = WebDriverWait(browser, 30).until(
             EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'Continue')]"))
         )
 
         browser.implicitly_wait(30)
+        browser.save_screenshot('steps/six-sectionedit-end.png')
         elementSubmit = browser.find_element(By.XPATH, "//*[contains(text(), 'Continue')]")
         printMessage(elementSubmit.get_attribute('type'), basefilename + str(getframe().f_lineno), 0)
 
         browser.execute_script("arguments[0].scrollIntoView(true);", elementSubmit)
 
         browser.execute_script("arguments[0].click();", elementSubmit)
+
     except Exception as e:
         browser.save_screenshot("6-exiterror109.png")
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)

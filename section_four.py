@@ -29,7 +29,7 @@ def NewFourthSection(browser, userData):
         formElement = WebDriverWait(browser, 100).until(
             EC.presence_of_element_located((By.XPATH, "//*[contains(text(), 'Save & Continue')]"))
         )
-
+        browser.save_screenshot('steps/four-sectionnew-end.png')
         elementbs = WebDriverWait(browser, 100).until(
             EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'Save & Continue')]"))
         )
@@ -37,6 +37,7 @@ def NewFourthSection(browser, userData):
         browser.implicitly_wait(10)
         printMessage(elementbs.get_attribute('type'), basefilename + str(getframe().f_lineno), 0)
         browser.execute_script("arguments[0].click();", elementbs)
+
     except Exception as e:
         browser.execute_script("alert('please complete third section')")
         browser.save_screenshot("4-fourerror532.png")

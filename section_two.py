@@ -25,6 +25,8 @@ def NewSecondSection(browser, userData, index=0):
     promotorData = userData['promotors'][index]
     print(26, promotorData)
 
+    browser.save_screenshot('steps/two-sectionnew-start.png')
+
     if userData['constitution_business'] == 'PVT':
         try:
             printMessage("Entering into second new forms", basefilename + str(getframe().f_lineno), 0)
@@ -43,7 +45,7 @@ def NewSecondSection(browser, userData, index=0):
             browser.save_screenshot('2-usererror.png')
             printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
-        time.sleep(50)
+        time.sleep(2)
 
         try:
             browser.implicitly_wait(10)
@@ -176,7 +178,7 @@ def NewSecondSection(browser, userData, index=0):
     try:
         fileElement = WebDriverWait(browser, 200).until(
             EC.presence_of_element_located((By.ID, "pd_upload"))
-        ).send_keys('C:\\Users\\Murugan\\Desktop\\download.jpg')
+        ).send_keys('C:\\Users\\Liva\\Desktop\\avatar.jpg')
     except Exception as e:
         browser.save_screenshot("2-profile.png")
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
@@ -268,7 +270,7 @@ def NewSecondSection(browser, userData, index=0):
         elementbs = WebDriverWait(browser, 30).until(
             EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'Save & Continue')]"))
         )
-
+        browser.save_screenshot('steps/two-sectionnew-end.png')
         # print(283, elementbs)
         browser.implicitly_wait(15)
         printMessage(elementbs.get_attribute('type'), basefilename + str(getframe().f_lineno), 0)
@@ -290,7 +292,7 @@ def NewSecondSection(browser, userData, index=0):
 def EditSecondSection(browser, userData):
     try:
         printMessage("second form edit submission enters", basefilename + str(getframe().f_lineno), 0)
-
+        browser.save_screenshot('steps/two-sectionedit-start.png')
         browser.implicitly_wait(20)
         if userData['constitution_business'] == 'PVT':
             elementbs = WebDriverWait(browser, 30).until(
@@ -333,6 +335,7 @@ def EditSecondSection(browser, userData):
 
 
         try:
+            browser.save_screenshot('steps/two-sectionedit-end.png')
             if pd_locality == '':
                 browser.save_screenshot('2-alert.png')
                 element = WebDriverWait(browser, 200).until(

@@ -28,6 +28,7 @@ def NewFifthSection(browser, userData):
         busElement = WebDriverWait(browser, 50).until(
             EC.presence_of_element_located((By.XPATH, "//*[@id='newRegForm']/fieldset/h4[1]/span"))
         )
+        browser.save_screenshot('steps/five-sectionnew-start.png')
     except Exception as e:
         browser.save_screenshot("5-placeerror550.png")
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
@@ -216,11 +217,11 @@ def NewFifthSection(browser, userData):
             if proofDb['id'] == 6:
                 fileElement = WebDriverWait(browser, 200).until(
                     EC.presence_of_element_located((By.ID, "bp_upload"))
-                ).send_keys('C:\\Users\\Murugan\\Desktop\\WhatsApp.jpeg')
+                ).send_keys('C:\\Users\\Liva\\Desktop\\avatar.jpg')
             else:
                 fileElement = WebDriverWait(browser, 200).until(
                     EC.presence_of_element_located((By.ID, "bp_upload"))
-                ).send_keys('C:\\Users\\Murugan\\Desktop\\download.jpg')
+                ).send_keys('C:\\Users\\Liva\\Desktop\\download.jpg')
             printMessage('upload', basefilename + str(getframe().f_lineno), 1)
         except Exception as e:
             browser.save_screenshot("5-file.png")
@@ -253,9 +254,11 @@ def NewFifthSection(browser, userData):
         )
 
         browser.implicitly_wait(20)
+        browser.save_screenshot('steps/five-sectionnew-end.png')
         printMessage(elementbs.get_attribute('type'), basefilename + str(getframe().f_lineno), 0)
         browser.execute_script("arguments[0].click();", elementbs)
         printMessage('save & continue button submitted', basefilename + str(getframe().f_lineno), 0)
+
     except Exception as e:
         browser.save_screenshot("5-fourerror229.png")
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
@@ -274,9 +277,11 @@ def EditFifthSection(browser, userData):
         )
 
         browser.implicitly_wait(20)
+        browser.save_screenshot('steps/five-sectionedit-end.png')
         printMessage(elementbs.get_attribute('type'), basefilename + str(getframe().f_lineno), 0)
         browser.execute_script("arguments[0].click();", elementbs)
         printMessage('save & continue button submitted', basefilename + str(getframe().f_lineno), 0)
+
     except Exception as e:
         browser.save_screenshot("5-fourerror229.png")
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)

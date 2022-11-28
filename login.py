@@ -44,6 +44,7 @@ def login_process(trn_number, userData):
         browser.save_screenshot("trn.png")
         trnfield = browser.find_element(By.CSS_SELECTOR, '#radiotrn')
         browser.execute_script("arguments[0].click();", trnfield)
+        browser.save_screenshot('steps/1-login-0.png')
 
     except Exception as e:
         browser.save_screenshot("trnerror.png")
@@ -68,6 +69,7 @@ def login_process(trn_number, userData):
         captchaElement = WebDriverWait(browser, 250).until(
             EC.presence_of_element_located((By.ID, "mobile_otp"))
         ).send_keys('')
+        browser.save_screenshot('steps/1-login-otp.png')
     except Exception as e:
         browser.save_screenshot("otperror.png")
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)

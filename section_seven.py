@@ -27,6 +27,7 @@ def NewSeventhSection(browser, userData):
         searchElement = WebDriverWait(browser, 50).until(
             EC.presence_of_element_located((By.ID, "gs_hsn_value"))
         )
+        browser.save_screenshot('steps/seven-sectionnew-start.png')
         browser.find_element("id", "gs_hsn_value").send_keys('48205000')
         time.sleep(5)
     except Exception as e:
@@ -51,12 +52,14 @@ def NewSeventhSection(browser, userData):
         )
 
         browser.implicitly_wait(30)
+        browser.save_screenshot('steps/seven-sectionnew-end.png')
         elementSubmit = browser.find_element(By.XPATH, "//*[contains(text(), 'Save & Continue')]")
         printMessage(elementSubmit.get_attribute('type'), basefilename + str(getframe().f_lineno), 0)
 
         browser.execute_script("arguments[0].scrollIntoView(true);", elementSubmit)
 
         browser.execute_script("arguments[0].click();", elementSubmit)
+
     except Exception as e:
         browser.save_screenshot("7-exiterror41.png")
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
@@ -66,18 +69,20 @@ def EditSeventhSection(browser, userData):
         printMessage('Edit Seventh form submission entry', basefilename + str(getframe().f_lineno), 0)
 
         browser.implicitly_wait(20)
-
+        browser.save_screenshot('steps/seven-sectionedit-new.png')
         elementbs = WebDriverWait(browser, 30).until(
             EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'Save & Continue')]"))
         )
 
         browser.implicitly_wait(30)
+        browser.save_screenshot('steps/seven-sectionedit-end.png')
         elementSubmit = browser.find_element(By.XPATH, "//*[contains(text(), 'Save & Continue')]")
         printMessage(elementSubmit.get_attribute('type'), basefilename + str(getframe().f_lineno), 0)
 
         browser.execute_script("arguments[0].scrollIntoView(true);", elementSubmit)
 
         browser.execute_script("arguments[0].click();", elementSubmit)
+
     except Exception as e:
         browser.save_screenshot("7-exiterror62.png")
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)

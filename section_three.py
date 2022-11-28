@@ -30,7 +30,7 @@ def NewThirdSection(browser, userData):
         )
         checkboxExists = 1
         printMessage('checkbox exists', basefilename + str(getframe().f_lineno), 0)
-
+        browser.save_screenshot('steps/three-sectionnew-start.png')
     except Exception as e:
         checkboxExists = 0
         browser.save_screenshot("3-primerrorstatus.png")
@@ -80,7 +80,7 @@ def NewThirdSection(browser, userData):
                 try:
                     fileElement = WebDriverWait(browser, 200).until(
                         EC.presence_of_element_located((By.ID, "as_upload_sign"))
-                    ).send_keys('C:\\Users\\Murugan\\Desktop\\download.jpg')
+                    ).send_keys('C:\\Users\\Liva\\Desktop\\download.jpg')
                 except Exception as e:
                     browser.save_screenshot("2-profile.png")
                     printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
@@ -131,6 +131,7 @@ def NewThirdSection(browser, userData):
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
     if userData['constitution_business']:
+        browser.save_screenshot('steps/three-sectionnew-end.png')
         try:
             if pd_locality == '':
                 browser.save_screenshot('3-alert.png')
@@ -138,6 +139,7 @@ def NewThirdSection(browser, userData):
                     EC.element_to_be_clickable((By.XPATH, '//*[@id="confirmDlg"]/div/div/div[2]/a[1]'))
                 )
                 element.click()
+
         except Exception as e:
             browser.save_screenshot('3-alerterror.png')
             printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
@@ -147,6 +149,7 @@ def EditThirdSection(browser, userData):
         printMessage('Edit Third form submission entry', basefilename + str(getframe().f_lineno), 0)
 
         browser.implicitly_wait(20)
+        browser.save_screenshot('steps/three-sectionedit-start.png')
         if userData['constitution_business'] == 'PVT':
             elementbs = WebDriverWait(browser, 30).until(
                 EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'Continue')]"))
@@ -166,6 +169,7 @@ def EditThirdSection(browser, userData):
         browser.execute_script("arguments[0].scrollIntoView(true);", elementSubmit)
 
         browser.execute_script("arguments[0].click();", elementSubmit)
+
     except Exception as e:
         browser.save_screenshot("3-exiterror501.png")
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
@@ -190,6 +194,7 @@ def EditThirdSection(browser, userData):
                     EC.element_to_be_clickable((By.XPATH, '//*[@id="confirmDlg"]/div/div/div[2]/a[1]'))
                 )
                 element.click()
+            browser.save_screenshot('steps/three-sectionedit-end.png')
         except Exception as e:
             browser.save_screenshot('3-alerterror.png')
             printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
