@@ -24,7 +24,7 @@ def NewSixthSection(browser, userData):
     try:
         printMessage('New Sixth form submission entry', basefilename + str(getframe().f_lineno), 0)
 
-        browser.implicitly_wait(20)
+        browser.implicitly_wait(30)
 
         elementbs = WebDriverWait(browser, 30).until(
             EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'Continue')]"))
@@ -39,15 +39,42 @@ def NewSixthSection(browser, userData):
         browser.execute_script("arguments[0].click();", elementSubmit)
 
         browser.find_element(By.XPATH, "//*[contains(text(), 'Continue')]").click()
+        form_submitted = 1
     except Exception as e:
+        form_submitted = 0
         browser.save_screenshot("6-exiterror109.png")
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+
+    if form_submitted==0:
+        try:
+            printMessage('New Sixth form submission reentry', basefilename + str(getframe().f_lineno), 0)
+
+            browser.implicitly_wait(30)
+
+            elementbs = WebDriverWait(browser, 30).until(
+                EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'Continue')]"))
+            )
+
+            browser.implicitly_wait(30)
+            elementSubmit = browser.find_element(By.XPATH, "//*[contains(text(), 'Continue')]")
+            printMessage(elementSubmit.get_attribute('type'), basefilename + str(getframe().f_lineno), 0)
+
+            browser.execute_script("arguments[0].scrollIntoView(true);", elementSubmit)
+
+            browser.execute_script("arguments[0].click();", elementSubmit)
+
+            browser.find_element(By.XPATH, "//*[contains(text(), 'Continue')]").click()
+            form_submitted = 1
+        except Exception as e:
+            form_submitted = 0
+            browser.save_screenshot("6-exiterror71.png")
+            printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
 def EditSixthSection(browser, userData):
     try:
         printMessage('Edit Sixth form submission entry', basefilename + str(getframe().f_lineno), 0)
 
-        browser.implicitly_wait(20)
+        browser.implicitly_wait(30)
 
         elementbs = WebDriverWait(browser, 30).until(
             EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'Continue')]"))

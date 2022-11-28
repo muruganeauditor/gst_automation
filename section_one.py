@@ -63,29 +63,142 @@ def NewFirstSection(browser, userData):
     userData['business_date'] = datetimenew.date().strftime("%d%m%Y")
 
     try:
-        WebDriverWait(browser, 250).until(
+        element = WebDriverWait(browser, 250).until(
             EC.presence_of_element_located((By.ID, "bd_cmbz"))
-        ).send_keys(userData['business_date'])
+        )
         dateElement = browser.find_element(By.ID, "bd_cmbz")
-        dateExists = dateElement.get_attribute('value')
-        printMessage('dob'+dateExists, basefilename + str(getframe().f_lineno), 0)
-        if dateExists == '':
-            dobElement = WebDriverWait(browser, 200).until(
-                EC.presence_of_element_located((By.ID, "bd_cmbz"))
-            ).send_keys(userData['business_date'])
-            browser.find_element("id", "bd_cmbz").send_keys(userData['business_date'])
-        printMessage("Date field filled", basefilename + str(getframe().f_lineno), 0)
+        # dateExists = dateElement.get_attribute('value')
+        browser.execute_script("arguments[0].value=arguments[1];", element, userData['business_date'])
+        printMessage('bdate'+userData['business_date'], basefilename + str(getframe().f_lineno), 1)
+
     except Exception as e:
         browser.save_screenshot("1-date.png")
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
-    # try:
-    #     fileElement = WebDriverWait(browser, 200).until(
-    #         EC.presence_of_element_located((By.ID, "tr_upload"))
-    #     ).send_keys('C:\\Users\\Murugan\\Desktop\\WhatsApp.jpeg')
-    # except Exception as e:
-    #     browser.save_screenshot("1-file.png")
-    #     printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+    try:
+        browser.implicitly_wait(20)
+        elementbs = WebDriverWait(browser, 30).until(
+            EC.element_to_be_clickable((By.XPATH, "//*[@id='newRegForm']/fieldset/div[1]/div[7]/div/div[2]/div/span[2]"))
+        )
+        elementbs.click()
+        printMessage("Date field click", basefilename + str(getframe().f_lineno), 0)
+    except Exception as e:
+        browser.save_screenshot('1-bderror.png')
+        printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+
+
+    try:
+        browser.implicitly_wait(5)
+
+        elementbs = WebDriverWait(browser, 30).until(
+            EC.element_to_be_clickable(
+                (By.CLASS_NAME, "dtp-btn-ok"))
+        )
+        elementbs.click()
+
+        printMessage("Date field ok", basefilename + str(getframe().f_lineno), 0)
+    except Exception as e:
+        browser.save_screenshot('1-bderror.png')
+        printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+
+    if userData['constitution_business'] == 'PVT':
+
+        try:
+            printMessage('pvt ltd works', basefilename + str(getframe().f_lineno), 1)
+            WebDriverWait(browser, 100).until(
+                EC.presence_of_element_located((By.ID, "exty"))
+            )
+            sel = Select(browser.find_element("id", 'exty'))
+            browser.implicitly_wait(10)
+            sel.select_by_value('cin')
+
+        except Exception as e:
+            printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+
+        try:
+            elementPara = WebDriverWait(browser, 20).until(
+                EC.presence_of_element_located((By.ID, "exno"))
+            ).send_keys('324234234')
+            printMessage('exno enters', basefilename + str(getframe().f_lineno), 0)
+            # browser.find_element("id", "tnm").send_keys('Test trades')
+        except Exception as e:
+            browser.save_screenshot('1-exno_error.png')
+            printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+
+        try:
+            element = WebDriverWait(browser, 250).until(
+                EC.presence_of_element_located((By.ID, "exdt"))
+            )
+            dateElement = browser.find_element(By.ID, "exdt")
+            # dateExists = dateElement.get_attribute('value')
+            browser.execute_script("arguments[0].value=arguments[1];", element, userData['business_date'])
+            browser.find_element("id", "exdt").send_keys('')
+            printMessage('bdate2' + userData['business_date'], basefilename + str(getframe().f_lineno), 1)
+
+        except Exception as e:
+            browser.save_screenshot("1-dateexdt.png")
+            printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+
+        try:
+            browser.save_screenshot('1-add.png')
+            element = WebDriverWait(browser, 200).until(
+                EC.element_to_be_clickable((By.XPATH, '//*[@id="newRegForm"]/fieldset/div[1]/div[8]/div/div[4]/button[1]'))
+            )
+            element.click()
+        except Exception as e:
+            browser.save_screenshot('1-adderror.png')
+            printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+
+        # try:
+        #     browser.implicitly_wait(20)
+        #     elementbs = WebDriverWait(browser, 30).until(
+        #         EC.element_to_be_clickable(
+        #             (By.XPATH, "//*[@id='newRegForm']/fieldset/div[1]/div[8]/div/div[3]/div/span"))
+        #     )
+        #     elementbs.click()
+        #
+        #     printMessage("Date2 field click", basefilename + str(getframe().f_lineno), 0)
+        # except Exception as e:
+        #     browser.save_screenshot('1-bderror.png')
+        #     printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+        #
+        # try:
+        #     browser.implicitly_wait(5)
+        #
+        #     elementbs = WebDriverWait(browser, 30).until(
+        #         EC.element_to_be_clickable(
+        #             (By.CLASS_NAME, "dtp-btn-ok"))
+        #     )
+        #     elementbs.click()
+        #
+        #     printMessage("Date2 field ok", basefilename + str(getframe().f_lineno), 0)
+        # except Exception as e:
+        #     browser.save_screenshot('1-bderror.png')
+        #     printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+        #
+        browser.implicitly_wait(5)
+
+        try:
+            WebDriverWait(browser, 100).until(
+                EC.presence_of_element_located((By.ID, "bd_up_type"))
+            )
+            sel = Select(browser.find_element("id", 'bd_up_type'))
+            browser.implicitly_wait(10)
+            sel.select_by_value('CINC')
+
+        except Exception as e:
+            printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+
+        try:
+            browser.implicitly_wait(10)
+            fileElement = WebDriverWait(browser, 200).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, "input[name='bd_upload']"))
+            ).send_keys('C:\\Users\\Murugan\\Desktop\\WhatsApp.jpeg')
+        except Exception as e:
+            browser.save_screenshot("1-file.png")
+            printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+
+        browser.save_screenshot('pvt-cin.png')
 
     # try:
     #     print("1 - entering into save and continue")

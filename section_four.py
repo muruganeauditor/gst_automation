@@ -38,6 +38,7 @@ def NewFourthSection(browser, userData):
         printMessage(elementbs.get_attribute('type'), basefilename + str(getframe().f_lineno), 0)
         browser.execute_script("arguments[0].click();", elementbs)
     except Exception as e:
+        browser.execute_script("alert('please complete third section')")
         browser.save_screenshot("4-fourerror532.png")
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 

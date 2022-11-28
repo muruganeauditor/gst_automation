@@ -127,48 +127,68 @@ def NewFifthSection(browser, userData):
     browser.implicitly_wait(15)
 
     try:
-        citya = browser.find_element("id", "divcd")
-        citys = Select(citya)
+        browser.implicitly_wait(5)
+
+        formElement = WebDriverWait(browser, 400).until(
+            EC.presence_of_element_located((By.XPATH, "//*[@id='divcd']/option[2]"))
+        )
+        formElement.click()
     except Exception as e:
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
-        citya = browser.find_element("id", "divcd")
-        citys = Select(citya)
 
-    browser.implicitly_wait(15)
-    print('division Options loading')
-
-    # iterate over dropdown options
-    for opt in citys.options:
-
-        sel = Select(browser.find_element("id", 'divcd'))
-
-        sel.select_by_visible_text(opt.text)
-        printMessage(opt.text, basefilename + str(getframe().f_lineno), 0)
-        time.sleep(0.8)
-        break
-
-    browser.implicitly_wait(15)
+    # try:
+    #     citya = browser.find_element("id", "divcd")
+    #     citys = Select(citya)
+    # except Exception as e:
+    #     printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+    #     citya = browser.find_element("id", "divcd")
+    #     citys = Select(citya)
+    #
+    # browser.implicitly_wait(15)
+    # print('division Options loading')
+    #
+    # # iterate over dropdown options
+    # for opt in citys.options:
+    #
+    #     sel = Select(browser.find_element("id", 'divcd'))
+    #
+    #     sel.select_by_visible_text(opt.text)
+    #     printMessage(opt.text, basefilename + str(getframe().f_lineno), 0)
+    #     time.sleep(0.8)
+    #     break
+    #
+    # browser.implicitly_wait(15)
+    #
+    # try:
+    #     range = browser.find_element("id", "rgcd")
+    #     ranges = Select(range)
+    # except Exception as e:
+    #     printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+    #     range = browser.find_element("id", "rgcd")
+    #     ranges = Select(range)
+    #
+    # browser.implicitly_wait(15)
+    # print('range Options loading')
+    #
+    # # iterate over dropdown options
+    # for opt in ranges.options:
+    #
+    #     sel = Select(browser.find_element("id", 'rgcd'))
+    #
+    #     sel.select_by_visible_text(opt.text)
+    #     printMessage(opt.text, basefilename + str(getframe().f_lineno), 0)
+    #     time.sleep(0.8)
+    #     break
 
     try:
-        range = browser.find_element("id", "rgcd")
-        ranges = Select(range)
+        browser.implicitly_wait(5)
+
+        formElement = WebDriverWait(browser, 400).until(
+            EC.presence_of_element_located((By.XPATH, "//*[@id='rgcd']/option[2]"))
+        )
+        formElement.click()
     except Exception as e:
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
-        range = browser.find_element("id", "rgcd")
-        ranges = Select(range)
-
-    browser.implicitly_wait(15)
-    print('range Options loading')
-
-    # iterate over dropdown options
-    for opt in ranges.options:
-
-        sel = Select(browser.find_element("id", 'rgcd'))
-
-        sel.select_by_visible_text(opt.text)
-        printMessage(opt.text, basefilename + str(getframe().f_lineno), 0)
-        time.sleep(0.8)
-        break
 
 
     # file upload
@@ -183,7 +203,7 @@ def NewFifthSection(browser, userData):
     print(addressData)
 
     for proofDb in addressData['proofs']:
-
+        print(proofDb)
         try:
             sel = Select(browser.find_element("id", 'bp_up_type'))
             browser.implicitly_wait(10)
@@ -193,9 +213,15 @@ def NewFifthSection(browser, userData):
             printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
         try:
-            fileElement = WebDriverWait(browser, 200).until(
-                EC.presence_of_element_located((By.ID, "bp_upload"))
-            ).send_keys('C:\\Users\\Murugan\\Desktop\\WhatsApp.jpeg')
+            if proofDb['id'] == 6:
+                fileElement = WebDriverWait(browser, 200).until(
+                    EC.presence_of_element_located((By.ID, "bp_upload"))
+                ).send_keys('C:\\Users\\Murugan\\Desktop\\WhatsApp.jpeg')
+            else:
+                fileElement = WebDriverWait(browser, 200).until(
+                    EC.presence_of_element_located((By.ID, "bp_upload"))
+                ).send_keys('C:\\Users\\Murugan\\Desktop\\download.jpg')
+            printMessage('upload', basefilename + str(getframe().f_lineno), 1)
         except Exception as e:
             browser.save_screenshot("5-file.png")
             printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
@@ -207,7 +233,8 @@ def NewFifthSection(browser, userData):
             # business_type = 'Retail Business'
             # forname = browser.find_element(By.XPATH, "//li//label[contains( text( ), '" + business_type + "')]").get_attribute(
             #     'for')
-            activity = browser.find_element(By.CSS_SELECTOR, '#' + bustype)
+            print(bustype,basefilename + str(getframe().f_lineno), 0)
+            activity = browser.find_element(By.CSS_SELECTOR, '#bp_ck_'+bustype.replace(' ',''))
             browser.execute_script("arguments[0].click();", activity)
         except Exception as e:
             browser.save_screenshot("5-business.png")

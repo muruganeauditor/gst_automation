@@ -20,9 +20,40 @@ from os.path import basename
 basefilename = basename(__file__)+' '
 getframe = sys._getframe
 
-def NewSecondSection(browser, userData):
+def NewSecondSection(browser, userData, index=0):
     global datetime
-    promotorData = userData['promotors'][0]
+    promotorData = userData['promotors'][index]
+    print(26, promotorData)
+
+    if userData['constitution_business'] == 'PVT':
+        try:
+            printMessage("Entering into second new forms", basefilename + str(getframe().f_lineno), 0)
+            browser.implicitly_wait(10)
+
+            elementPara = WebDriverWait(browser, 50).until(
+                EC.presence_of_element_located((By.ID, "fnm"))
+            )
+            browser.execute_script("arguments[0].scrollIntoView(true);", elementPara)
+            browser.save_screenshot('2-userfocus.png')
+            fnameElement = WebDriverWait(browser, 5).until(
+                EC.presence_of_element_located((By.ID, "fnm"))
+            ).send_keys(promotorData['firstname'])
+        except Exception as e:
+            # browser.execute_script("alert('please complete first section')")
+            browser.save_screenshot('2-usererror.png')
+            printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+
+        time.sleep(50)
+
+        try:
+            browser.implicitly_wait(10)
+            fnameElement = WebDriverWait(browser, 10).until(
+                EC.presence_of_element_located((By.ID, "pd_lname"))
+            ).send_keys(promotorData['lastname'])
+        except Exception as e:
+            browser.save_screenshot('2-userlerror.png')
+            printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+
     try:
         printMessage("Entering into second new form", basefilename + str(getframe().f_lineno), 0)
         browser.implicitly_wait(10)
@@ -43,14 +74,18 @@ def NewSecondSection(browser, userData):
         browser.implicitly_wait(10)
         fnameElement = WebDriverWait(browser, 10).until(
             EC.presence_of_element_located((By.ID, "pd_flname"))
-        ).send_keys(promotorData['father_lastname'] if promotorData['father_lastname']!='null' else '' )
+        ).send_keys(promotorData['father_lastname'] if promotorData['father_lastname']!='null' and promotorData['father_lastname']!=None else '' )
     except Exception as e:
         browser.save_screenshot('2-fatherlerror.png')
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
-    format = '%Y-%m-%d'
-    datetime = datetime.datetime.strptime(promotorData['dob'], format)
-    promotorData['dob'] = datetime.date().strftime("%d%m%Y")
+    try:
+        format = '%Y-%m-%d'
+        datetimeTwo = datetime.datetime.strptime(promotorData['dob'], format)
+        promotorData['dob'] = datetimeTwo.date().strftime("%d%m%Y")
+    except Exception as e:
+        browser.save_screenshot('2-dob.png')
+        printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
     try:
         browser.implicitly_wait(20)
@@ -120,6 +155,24 @@ def NewSecondSection(browser, userData):
         browser.save_screenshot("2-proerror.png")
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
+    if userData['constitution_business'] == 'PVT':
+        try:
+            desElement = WebDriverWait(browser, 50).until(
+                EC.presence_of_element_located((By.ID, "din"))
+            ).send_keys(promotorData['din_number'])
+        except Exception as e:
+            browser.save_screenshot("2-dinerror.png")
+            printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+
+    if userData['constitution_business'] == 'PVT':
+        try:
+            desElement = WebDriverWait(browser, 50).until(
+                EC.presence_of_element_located((By.ID, "pan"))
+            ).send_keys(promotorData['pan_number'])
+        except Exception as e:
+            browser.save_screenshot("2-panerror.png")
+            printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+
     try:
         fileElement = WebDriverWait(browser, 200).until(
             EC.presence_of_element_located((By.ID, "pd_upload"))
@@ -128,30 +181,31 @@ def NewSecondSection(browser, userData):
         browser.save_screenshot("2-profile.png")
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
-    try:
-        browser.implicitly_wait(5)
+    if promotorData['also_authorized_signatory']=='Yes':
+        try:
+            browser.implicitly_wait(5)
 
-        element = browser.find_element(By.ID, "pri_auth")
-        browser.execute_script("arguments[0].scrollIntoView(true);", element)
+            element = browser.find_element(By.ID, "pri_auth")
+            browser.execute_script("arguments[0].scrollIntoView(true);", element)
 
-        browser.execute_script("arguments[0].click();", element)
+            browser.execute_script("arguments[0].click();", element)
 
-        # element = WebDriverWait(browser, 40).until(
-        #     EC.element_to_be_clickable((By.ID, "pri_auth"))
-        # )
-        #
-        # browser.implicitly_wait(10)
-        # print(263, element.get_attribute('type'))
-        # element.click()
-    except Exception as e:
-        element = WebDriverWait(browser, 30).until(
-            EC.element_to_be_clickable((By.ID, "pri_auth"))
-        )
+            # element = WebDriverWait(browser, 40).until(
+            #     EC.element_to_be_clickable((By.ID, "pri_auth"))
+            # )
+            #
+            # browser.implicitly_wait(10)
+            # print(263, element.get_attribute('type'))
+            # element.click()
+        except Exception as e:
+            element = WebDriverWait(browser, 30).until(
+                EC.element_to_be_clickable((By.ID, "pri_auth"))
+            )
 
-        printMessage(element.get_attribute('type'), basefilename + str(getframe().f_lineno), 1)
-        element.click()
-        browser.save_screenshot("2-saveerror273.png")
-        printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+            printMessage(element.get_attribute('type'), basefilename + str(getframe().f_lineno), 1)
+            element.click()
+            browser.save_screenshot("2-saveerror273.png")
+            printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
     try:
         searchElement = WebDriverWait(browser, 50).until(
@@ -238,10 +292,17 @@ def EditSecondSection(browser, userData):
         printMessage("second form edit submission enters", basefilename + str(getframe().f_lineno), 0)
 
         browser.implicitly_wait(20)
+        if userData['constitution_business'] == 'PVT':
+            elementbs = WebDriverWait(browser, 30).until(
+                EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'Continue')]"))
+            )
 
-        elementbs = WebDriverWait(browser, 30).until(
-            EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'Save & Continue')]"))
-        )
+            browser.implicitly_wait(30)
+            elementSubmit = browser.find_element(By.XPATH, "//*[contains(text(), 'Continue')]")
+        else:
+            elementbs = WebDriverWait(browser, 30).until(
+                EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'Save & Continue')]"))
+            )
 
         browser.implicitly_wait(30)
         printMessage(elementbs.get_attribute('type'), basefilename + str(getframe().f_lineno), 0)
@@ -257,27 +318,28 @@ def EditSecondSection(browser, userData):
         browser.save_screenshot("2-saveerror444.png")
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
-    try:
-        localityElement = WebDriverWait(browser, 50).until(
-            EC.presence_of_element_located((By.ID, "pd_locality"))
-        )
-        pd_locality = localityElement.get_attribute('value')
-        printMessage(pd_locality, basefilename + str(getframe().f_lineno), 0)
-        time.sleep(1)
-    except Exception as e:
-        pd_locality = ''
-        browser.save_screenshot("2-localityerror.png")
-        printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
-
-
-    try:
-        if pd_locality == '':
-            browser.save_screenshot('2-alert.png')
-            element = WebDriverWait(browser, 200).until(
-                EC.element_to_be_clickable((By.XPATH, '//*[@id="confirmDlg"]/div/div/div[2]/a[1]'))
+    if userData['constitution_business'] != 'PVT':
+        try:
+            localityElement = WebDriverWait(browser, 50).until(
+                EC.presence_of_element_located((By.ID, "pd_locality"))
             )
-            element.click()
-    except Exception as e:
-        browser.save_screenshot('2-alerterror.png')
-        printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+            pd_locality = localityElement.get_attribute('value')
+            printMessage(pd_locality, basefilename + str(getframe().f_lineno), 0)
+            time.sleep(1)
+        except Exception as e:
+            pd_locality = ''
+            browser.save_screenshot("2-localityerror.png")
+            printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+
+
+        try:
+            if pd_locality == '':
+                browser.save_screenshot('2-alert.png')
+                element = WebDriverWait(browser, 200).until(
+                    EC.element_to_be_clickable((By.XPATH, '//*[@id="confirmDlg"]/div/div/div[2]/a[1]'))
+                )
+                element.click()
+        except Exception as e:
+            browser.save_screenshot('2-alerterror.png')
+            printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 

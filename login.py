@@ -136,31 +136,77 @@ def login_process(trn_number, userData):
     # sys.exit()
 
     # Check whether second section completed or not
-
+    secondCompleted = 0
     try:
-        elementSec = WebDriverWait(browser, 30).until(
-            EC.presence_of_element_located((By.ID, "ffname"))
+        browser.implicitly_wait(10)
+        secondElement = WebDriverWait(browser, 80).until(
+            EC.presence_of_element_located((By.XPATH, "/html/body/div[2]/div/div/div[3]/div/ul/li[2]"))
         )
-        FatherExists = elementSec.get_attribute('value')
+        printMessage(secondElement, basefilename + str(getframe().f_lineno), 0)
+        printMessage(secondElement.get_attribute('class'), basefilename + str(getframe().f_lineno), 0)
+        titleClass = secondElement.get_attribute('class')
+        if titleClass == 'active complete':
+            secondCompleted = 1
+
     except Exception as e:
-        FatherExists = ''
-        browser.save_screenshot('fathererror.png')
+        browser.save_screenshot("seconderror192.png")
         printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
 
-    if FatherExists is None or FatherExists =='':
-        printMessage("this is new second record:" + FatherExists, basefilename + str(getframe().f_lineno), 0)
+    if secondCompleted == 0:
         section_two.NewSecondSection(browser, userData)
+        time.sleep(5)
+        if userData['constitution_business'] != 'PVT':
+            browser.execute_script("alert('please pick address and press Save & Continue, next form only will handle by bot')")
+            print('Second form completed')
+        else:
+            print(162, userData['promotors'])
+            if len(userData['promotors']) > 1:
+                browser.execute_script("alert('please pick address and press Add New button')")
+                printMessage("this is new second record 2:" , basefilename + str(getframe().f_lineno), 0)
 
+                time.sleep(50)
+                section_two.NewSecondSection(browser, userData, 1)
+                browser.execute_script(
+                    "alert('please pick address and press Save & Continue, next form only will handle by bot')")
+
+        time.sleep(50)
     else:
-        printMessage("this is old second record:" + FatherExists, basefilename + str(getframe().f_lineno), 0)
         section_two.EditSecondSection(browser, userData)
 
-    time.sleep(5)
-    print('Second form completed')
-
-    if FatherExists is None or FatherExists =='':
-        browser.execute_script("alert('please pick address and make sure to submit this form fully, next form only will handle by bot')")
-        time.sleep(50)
+    # try:
+    #     elementSec = WebDriverWait(browser, 30).until(
+    #         EC.presence_of_element_located((By.ID, "ffname"))
+    #     )
+    #     FatherExists = elementSec.get_attribute('value')
+    # except Exception as e:
+    #     FatherExists = ''
+    #     browser.save_screenshot('fathererror.png')
+    #     printMessage(str(e), basefilename + str(getframe().f_lineno), 1)
+    #
+    # if FatherExists is None or FatherExists =='':
+    #     printMessage("this is new second record:" + FatherExists, basefilename + str(getframe().f_lineno), 0)
+    #     section_two.NewSecondSection(browser, userData)
+    #
+    # else:
+    #     printMessage("this is old second record:" + FatherExists, basefilename + str(getframe().f_lineno), 0)
+    #     section_two.EditSecondSection(browser, userData)
+    #
+    # time.sleep(5)
+    # print('Second form completed')
+    #
+    # if FatherExists is None or FatherExists =='':
+    #     print(162, userData['promotors'])
+    #     print('Second form completed'+str(len(userData['promotors'])))
+    #     if len(userData['promotors'])>1:
+    #         browser.execute_script("alert('please pick address and press Add New button')")
+    #         printMessage("this is new second record 2:" + FatherExists, basefilename + str(getframe().f_lineno), 0)
+    #
+    #         time.sleep(50)
+    #         section_two.NewSecondSection(browser, userData, 1)
+    #         browser.execute_script("alert('please pick address and press Save & Continue, next form only will handle by bot')")
+    #     else:
+    #         browser.execute_script("alert('please pick address and press Save & Continue, next form only will handle by bot')")
+    #     time.sleep(50)
 
     # sys.exit()
     # print('Process completed, if alert shows will handle here')
