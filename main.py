@@ -16,7 +16,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 
-api_url = "http://admin.ibuyfresh.in/api/udyamDetails"
+api_url = "http://admin.ibuyfresh.in/api/getgstDetails"
 response = requests.get(api_url)
 apiResponse = response.json()
 # print(apiResponse['status'])
